@@ -1,0 +1,4 @@
+cithemes-location-service
+.vscode/
+cmd/location-service/__debug_bin
+.env
