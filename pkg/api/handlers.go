@@ -1,19 +1,12 @@
 package api
 
-import(
+import (
 	"net/http"
 )
 
-var handlers = initHandlersMap()
-
-func initHandlersMap() map[string]http.HandlerFunc {
-	handlersMap := make(map[string]http.HandlerFunc)
-
-	handlersMap["/geocoding/reverse"] = geocodingRequestHandler
-	
-	return handlersMap
+var handlers = map[string]http.HandlerFunc {
+	"/geocoding/reverse": geocodingRequestHandler,
 }
-
 
 // LoadHandlers loads all the services handlers as defined in the api package
 func LoadHandlers(server *http.ServeMux) {

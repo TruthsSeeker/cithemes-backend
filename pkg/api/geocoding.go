@@ -1,13 +1,13 @@
 package api
 
 import (
-	"net/http"
-	"fmt"
-	"log"
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
 	"github.com/TruthsSeeker/cithemes-backend/internal/data"
 	"github.com/TruthsSeeker/cithemes-backend/internal/googlemaps"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 func geocodingRequestHandler(w http.ResponseWriter, r *http.Request) {
@@ -35,9 +35,9 @@ func geocodingRequestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(jsonresult))
 }
 
-func requestGoogleReverseGeocoding(r *data.GeocodingRequest) googlemaps.GoogleReverseGeocodingResponse{
+func requestGoogleReverseGeocoding(r *data.GeocodingRequest) googlemaps.GoogleReverseGeocodingResponse {
 	params := googlemaps.FormatParameters(r)
-	grequest, err := http.NewRequest("GET", googlemaps.ApiURL + "/geocode/json", nil)
+	grequest, err := http.NewRequest("GET", googlemaps.ApiURL+"/geocode/json", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
