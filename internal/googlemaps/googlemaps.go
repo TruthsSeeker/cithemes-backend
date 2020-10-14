@@ -3,8 +3,8 @@ package googlemaps
 import(
 	"fmt"
 	"net/url"
-	"github.com/TruthsSeeker/cithemes-location-service/internal/data"
-	"github.com/TruthsSeeker/cithemes-location-service/internal/utils"
+	"github.com/TruthsSeeker/cithemes-backend/internal/data"
+	"github.com/TruthsSeeker/cithemes-backend/internal/utils"
 )
 
 // GoogleReverseGeocodingResponse struct to unmarshal a Google Maps Platform reverse geocoding response
@@ -23,13 +23,10 @@ type GoogleReverseGeocodingResponse struct {
 	Status string `json:"status"`
 }
 
-// type GoogleReverseGeocodingRequest struct {
-// 	LatLng float64 `param:"latlng"`
-// 	Language string `param:"language"`
-// 	APIKey string `param:"key"`
-// }
+var ApiURL = "https://maps.googleapis.com/maps/api"
 
-func FormatParametersForGoogleRequest(request *data.GeocodingRequest) string {
+// FormatParameters formats a data.GeocodingRequest into URL encoded GET parameters ready to be consumed by Google Maps' API
+func FormatParameters(request *data.GeocodingRequest) url.Values {
 	params := url.Values{}
 
 	key := utils.GetEnvVariable("GOOGLE_MAPS_API_KEY")
@@ -40,6 +37,6 @@ func FormatParametersForGoogleRequest(request *data.GeocodingRequest) string {
 
 	language := request.Locale
 	params.Add("language", language)
-	return params.Encode()
+	return params
 }
 

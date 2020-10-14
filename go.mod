@@ -1,4 +1,4 @@
-module github.com/TruthsSeeker/cithemes-location-service
+module github.com/TruthsSeeker/cithemes-backend
 
 go 1.15
 

@@ -1,0 +1,266 @@
+{
+    "results": [
+      {
+        "formatted_address": "277 Bedford Ave, Brooklyn, NY 11211, États-Unis",
+        "place_id": "ChIJd8BlQ2BZwokRAFUEcm_qrcA",
+        "types": [
+          "street_address"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 0,
+              "lng": 0
+            },
+            "southwest": {
+              "lat": 0,
+              "lng": 0
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "279 Bedford Ave, Brooklyn, NY 11211, États-Unis",
+        "place_id": "ChIJRYYERGBZwokRAM4n1GlcYX4",
+        "types": [
+          "premise"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.7142628,
+              "lng": -73.9612131
+            },
+            "southwest": {
+              "lat": 40.7141534,
+              "lng": -73.9613792
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "279 Bedford Ave, Brooklyn, NY 11211, États-Unis",
+        "place_id": "ChIJT2x8Q2BZwokRpBu2jUzX3dE",
+        "types": [
+          "bakery",
+          "cafe",
+          "establishment",
+          "food",
+          "point_of_interest",
+          "store"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 0,
+              "lng": 0
+            },
+            "southwest": {
+              "lat": 0,
+              "lng": 0
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "291-275 Bedford Ave, Brooklyn, NY 11211, États-Unis",
+        "place_id": "ChIJ8ThWRGBZwokR3E1zUisk3LU",
+        "types": [
+          "route"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.7145065,
+              "lng": -73.9612923
+            },
+            "southwest": {
+              "lat": 40.7139055,
+              "lng": -73.96168349999999
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "South Williamsburg, Brooklyn, NY, États-Unis",
+        "place_id": "ChIJR3_ODdlbwokRYtN19kNtcuk",
+        "types": [
+          "neighborhood",
+          "political"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.7167119,
+              "lng": -73.9420904
+            },
+            "southwest": {
+              "lat": 40.6984866,
+              "lng": -73.9699432
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "Brooklyn, État de New York 11211, États-Unis",
+        "place_id": "ChIJvbEjlVdZwokR4KapM3WCFRw",
+        "types": [
+          "postal_code"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.7280089,
+              "lng": -73.9207299
+            },
+            "southwest": {
+              "lat": 40.7008331,
+              "lng": -73.9644697
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "Williamsburg, Brooklyn, État de New York, États-Unis",
+        "place_id": "ChIJQSrBBv1bwokRbNfFHCnyeYI",
+        "types": [
+          "neighborhood",
+          "political"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.7251773,
+              "lng": -73.936498
+            },
+            "southwest": {
+              "lat": 40.6979329,
+              "lng": -73.96984499999999
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "Brooklyn, État de New York, États-Unis",
+        "place_id": "ChIJCSF8lBZEwokRhngABHRcdoI",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.739446,
+              "lng": -73.8333651
+            },
+            "southwest": {
+              "lat": 40.551042,
+              "lng": -74.05663
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "comté de Kings, Brooklyn, État de New York, États-Unis",
+        "place_id": "ChIJOwE7_GTtwokRs75rhW4_I6M",
+        "types": [
+          "administrative_area_level_2",
+          "political"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.739446,
+              "lng": -73.8333651
+            },
+            "southwest": {
+              "lat": 40.551042,
+              "lng": -74.05663
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "New York, État de New York, États-Unis",
+        "place_id": "ChIJOwg_06VPwokRYv534QaPC8g",
+        "types": [
+          "locality",
+          "political"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 40.9175771,
+              "lng": -73.70027209999999
+            },
+            "southwest": {
+              "lat": 40.4773991,
+              "lng": -74.25908989999999
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "Long Island, État de New York, États-Unis",
+        "place_id": "ChIJy6Xu4VRE6IkRGA2UhmH59x0",
+        "types": [
+          "establishment",
+          "natural_feature"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 41.1612401,
+              "lng": -71.85620109999999
+            },
+            "southwest": {
+              "lat": 40.5429789,
+              "lng": -74.0419497
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "État de New York, États-Unis",
+        "place_id": "ChIJqaUj8fBLzEwRZ5UY3sHGz90",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 45.015861,
+              "lng": -71.777491
+            },
+            "southwest": {
+              "lat": 40.4773991,
+              "lng": -79.7625901
+            }
+          }
+        }
+      },
+      {
+        "formatted_address": "États-Unis",
+        "place_id": "ChIJCzYy5IS16lQRQrfeQ5K5Oxw",
+        "types": [
+          "country",
+          "political"
+        ],
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 71.5388001,
+              "lng": -66.885417
+            },
+            "southwest": {
+              "lat": 18.7763,
+              "lng": 170.5957
+            }
+          }
+        }
+      }
+    ],
+    "status": "OK"
+  }

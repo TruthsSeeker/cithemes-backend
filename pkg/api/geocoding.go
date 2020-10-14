@@ -6,11 +6,11 @@ import (
 	"log"
 	"encoding/json"
 	"io/ioutil"
-	"github.com/TruthsSeeker/cithemes-location-service/internal/data"
-	"github.com/TruthsSeeker/cithemes-location-service/internal/googlemaps"
+	"github.com/TruthsSeeker/cithemes-backend/internal/data"
+	"github.com/TruthsSeeker/cithemes-backend/internal/googlemaps"
 )
 
-func GeocodingRequestHandler(w http.ResponseWriter, r *http.Request) {
+func geocodingRequestHandler(w http.ResponseWriter, r *http.Request) {
 	var regeocodingrequest data.GeocodingRequest
 	defer r.Body.Close()
 	body, err := ioutil.ReadAll(r.Body)
@@ -36,8 +36,15 @@ func GeocodingRequestHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func requestGoogleReverseGeocoding(r *data.GeocodingRequest) googlemaps.GoogleReverseGeocodingResponse{
-	params := googlemaps.FormatParametersForGoogleRequest(r)
-	resp, err := http.Get("https://maps.googleapis.com/maps/api/geocode/json?" + params)
+	params := googlemaps.FormatParameters(r)
+	grequest, err := http.NewRequest("GET", googlemaps.ApiURL + "/geocode/json", nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	grequest.URL.RawQuery = params.Encode()
+
+	client := http.Client{}
+	resp, err := client.Do(grequest)
 	if err != nil {
 		log.Fatalln("Error in google reverse geocoding:\n", err)
 	}

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 	"log"
-	"github.com/TruthsSeeker/cithemes-location-service/pkg/api"
+	"github.com/TruthsSeeker/cithemes-backend/pkg/api"
 )
 
 
