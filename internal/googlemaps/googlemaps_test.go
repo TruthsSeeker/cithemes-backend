@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"reflect"
 	"net/url"
-	"github.com/TruthsSeeker/cithemes-backend/internal/data"
+	"github.com/TruthsSeeker/cithemes-backend/pkg/types"
 	"github.com/TruthsSeeker/cithemes-backend/internal/utils"
 	"testing"
 )
@@ -17,8 +17,8 @@ func Test_FormatParameters(t *testing.T) {
 	tp.Add("latlng", "0.000000,0.000000")
 	tp.Add("language", "FR")
 
-	gr := &data.GeocodingRequest{
-		Position: data.Coordinates{
+	gr := &types.GeocodingRequest{
+		Position: types.Coordinates{
 			Latitude: 0.0,
 			Longitude: 0.0,
 		},

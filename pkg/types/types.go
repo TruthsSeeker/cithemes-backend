@@ -1,4 +1,4 @@
-package data
+package types
 
 // Coordinates wrapper struct for a set of coordinates
 type Coordinates struct {

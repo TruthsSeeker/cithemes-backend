@@ -1,4 +1,4 @@
-package data
+package types
 
 // GeocodingRequest Geocoding request format
 type GeocodingRequest struct {

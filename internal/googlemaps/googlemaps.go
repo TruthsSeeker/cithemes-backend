@@ -3,7 +3,7 @@ package googlemaps
 import(
 	"fmt"
 	"net/url"
-	"github.com/TruthsSeeker/cithemes-backend/internal/data"
+	"github.com/TruthsSeeker/cithemes-backend/pkg/types"
 	"github.com/TruthsSeeker/cithemes-backend/internal/utils"
 )
 
@@ -15,8 +15,8 @@ type GoogleReverseGeocodingResponse struct {
 		Types []string `json:"types"`
 		Geometry struct {
 			Bounds struct {
-				Northeast data.Coordinates `json:"northeast"`
-				Southwest data.Coordinates `json:"southwest"`
+				Northeast types.Coordinates `json:"northeast"`
+				Southwest types.Coordinates `json:"southwest"`
 			} `json:"bounds"`
 		} `json:"geometry"`
 	} `json:"results"`
@@ -26,7 +26,7 @@ type GoogleReverseGeocodingResponse struct {
 var ApiURL = "https://maps.googleapis.com/maps/api"
 
 // FormatParameters formats a data.GeocodingRequest into URL encoded GET parameters ready to be consumed by Google Maps' API
-func FormatParameters(request *data.GeocodingRequest) url.Values {
+func FormatParameters(request *types.GeocodingRequest) url.Values {
 	params := url.Values{}
 
 	key := utils.GetEnvVariable("GOOGLE_MAPS_API_KEY")

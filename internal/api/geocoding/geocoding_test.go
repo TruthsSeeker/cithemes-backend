@@ -1,6 +1,7 @@
-package api
+package geocoding
 
 import (
+	"github.com/TruthsSeeker/cithemes-backend/pkg/types"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -11,7 +12,6 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/TruthsSeeker/cithemes-backend/internal/data"
 	"github.com/TruthsSeeker/cithemes-backend/internal/googlemaps"
 )
 
@@ -25,6 +25,7 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
+	
 	pwd, _ := os.Getwd()
 	jsonResponse, err := ioutil.ReadFile(pwd + "/testdata/mockreversegeocodingraw.json")
 	if err != nil {
@@ -64,8 +65,8 @@ func Test_geocodingRequestHandler(t *testing.T) {
 			args: args{
 				w: httptest.NewRecorder(),
 				r: func() *http.Request {
-					mockRequest, err := json.Marshal(data.GeocodingRequest{
-						Position: data.Coordinates{
+					mockRequest, err := json.Marshal(types.GeocodingRequest{
+						Position: types.Coordinates{
 							Latitude:  40.714224,
 							Longitude: -73.961452,
 						},
@@ -103,7 +104,7 @@ func Test_geocodingRequestHandler(t *testing.T) {
 
 func Test_requestGoogleReverseGeocoding(t *testing.T) {
 	type args struct {
-		r *data.GeocodingRequest
+		r *types.GeocodingRequest
 	}
 	tests := []struct {
 		name string
@@ -113,8 +114,8 @@ func Test_requestGoogleReverseGeocoding(t *testing.T) {
 		{
 			name: "default",
 			args: args{
-				r: &data.GeocodingRequest{
-					Position: data.Coordinates{
+				r: &types.GeocodingRequest{
+					Position: types.Coordinates{
 						Latitude:  40.714224,
 						Longitude: -73.961452,
 					},

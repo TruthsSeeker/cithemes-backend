@@ -1,4 +1,4 @@
-package data
+package types
 
 
 // GeocodingResponse internal geocoding request response type
