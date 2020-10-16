@@ -1,4 +1,4 @@
-package firestore
+package cithemesfirestore
 
 import (
 	"google.golang.org/api/iterator"
@@ -15,7 +15,7 @@ type Vote struct {
 }
 
 type VoteCounter struct {
-	numShards int
+	NumShards int
 }
 
 type Shard struct {
@@ -23,10 +23,10 @@ type Shard struct {
 }
 
 
-func (c *VoteCounter) initCounter(ctx context.Context, docRef *firestore.DocumentRef) error {
+func (c *VoteCounter) InitCounter(ctx context.Context, docRef *firestore.DocumentRef) error {
 	colRef := docRef.Collection("shards")
 
-	for num := 0; num < c.numShards; num++ {
+	for num := 0; num < c.NumShards; num++ {
 		shard := Shard{0}
 		if _, err := colRef.Doc(strconv.Itoa(num)).Set(ctx, shard); err != nil {
 			return fmt.Errorf("Set: %v", err)
@@ -35,8 +35,8 @@ func (c *VoteCounter) initCounter(ctx context.Context, docRef *firestore.Documen
 	return nil
 }
 
-func (c *VoteCounter) incrementCounter(ctx context.Context, docRef *firestore.DocumentRef, value int) (*firestore.WriteResult, error) {
-	docID := strconv.Itoa(rand.Intn(c.numShards))
+func (c *VoteCounter) IncrementCounter(ctx context.Context, docRef *firestore.DocumentRef, value int) (*firestore.WriteResult, error) {
+	docID := strconv.Itoa(rand.Intn(c.NumShards))
 	shardRef := docRef.Collection("shards").Doc(docID)
 
 	return shardRef.Update(ctx, []firestore.Update{
@@ -44,7 +44,7 @@ func (c *VoteCounter) incrementCounter(ctx context.Context, docRef *firestore.Do
 	})
 }
 
-func (c *VoteCounter) getCount(ctx context.Context, docRef *firestore.DocumentRef) (int64, error) {
+func (c *VoteCounter) GetCount(ctx context.Context, docRef *firestore.DocumentRef) (int64, error) {
 	var total int64
 	shards := docRef.Collection("shards").Documents(ctx) // returns an iterator
 	for {

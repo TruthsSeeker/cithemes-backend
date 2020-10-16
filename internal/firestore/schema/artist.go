@@ -1,4 +1,4 @@
-package firestore
+package cithemesfirestore
 
 type Artist struct {
 	Name 		string 			`firestore:"name" json:"name"`

@@ -1,1 +1,5 @@
-package firestore
+package cithemesfirestore
+
+type User struct {
+
+}

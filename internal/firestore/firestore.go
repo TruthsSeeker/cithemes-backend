@@ -1,4 +1,4 @@
-package firestore
+package cithemesfirestore
 
 import (
 	"cloud.google.com/go/firestore"

@@ -1,4 +1,4 @@
-package firestore
+package cithemesfirestore
 
 type Song struct {
 	ID 					string 				`firestore:"id" json:"id"`

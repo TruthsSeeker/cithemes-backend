@@ -1,4 +1,4 @@
-package firestore
+package cithemesfirestore
 
 import (
 	"github.com/TruthsSeeker/cithemes-backend/pkg/types"
