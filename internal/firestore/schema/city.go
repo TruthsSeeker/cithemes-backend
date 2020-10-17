@@ -18,3 +18,7 @@ type CitySnippet struct {
 	LocalizedName 	map[string]string 	`firestore:"localized_name" json:"localized_name"`
 	CityID 			string 				`firestore:"city_id" json:"city_id"`
 }
+
+type Bounds struct {
+	
+}
