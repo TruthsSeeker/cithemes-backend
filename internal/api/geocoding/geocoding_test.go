@@ -84,7 +84,7 @@ func Test_geocodingRequestHandler(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			geocodingRequestHandler(tt.args.w, tt.args.r)
+			GeocodingRequestHandler(tt.args.w, tt.args.r)
 			var unmarshalled googlemaps.GoogleReverseGeocodingResponse
 			err := json.Unmarshal(tt.args.w.Body.Bytes(), &unmarshalled)
 			if err != nil {

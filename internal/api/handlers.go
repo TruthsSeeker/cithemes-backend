@@ -8,7 +8,16 @@ import (
 
 var handlers = map[string]http.HandlerFunc {
 	"/geocoding/reverse": geocoding.GeocodingRequestHandler,
-	"/music/spotify/auth": musicservices.GetSpotifyAccessToken,
+}
+
+func init() {
+	addHandlers(musicservices.Handlers)
+}
+
+func addHandlers(m map[string]http.HandlerFunc) {
+	for hk, hv := range m {
+		handlers[hk] = hv
+	}
 }
 
 // LoadHandlers loads all the services handlers as defined in the api package
