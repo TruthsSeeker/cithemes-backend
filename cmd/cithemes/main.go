@@ -1,8 +1,9 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
+
 	"github.com/TruthsSeeker/cithemes-backend/internal/api"
 )
 
