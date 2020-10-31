@@ -57,3 +57,22 @@ type Data struct {
 	Attributes    Attributes    `json:"attributes"`
 	Relationships Relationships `json:"relationships"`
 }
+
+type Storefronts struct {
+	Data []StorefrontData `json:"data"`
+}
+
+type StorefrontAttributes struct {
+	ExplicitContentPolicy string   `json:"explicitContentPolicy"`
+	SupportedLanguageTags []string `json:"supportedLanguageTags"`
+	Name                  string   `json:"name"`
+	DefaultLanguageTag    string   `json:"defaultLanguageTag"`
+}
+
+type StorefrontData struct {
+	ID         string     `json:"id"`
+	Type       string     `json:"type"`
+	Href       string     `json:"href"`
+	Attributes Attributes `json:"attributes"`
+}
+

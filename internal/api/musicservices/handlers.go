@@ -14,6 +14,10 @@ var Handlers = map[string]http.HandlerFunc{
 	"/music/track/spotify": GetSpotifyTrack,
 }
 
+func Search(w http.ResponseWriter, r *http.Request) {
+	
+}
+
 func GetSpotifyTrack(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	jsonBody, err := ioutil.ReadAll(r.Body)
