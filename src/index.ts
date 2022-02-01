@@ -1,4 +1,3 @@
-import bodyparser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import dotenv from 'dotenv'
@@ -12,8 +11,6 @@ import {knex} from './db/database'
 
 const app = express()
 app.use(cors())
-app.use(bodyparser.json())
-console.log(process.cwd())
 app.use('/api/', MasterRouter)
 knex.migrate.latest().then(() => {
     console.log("All database migrations done")

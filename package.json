@@ -4,17 +4,20 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start:dev": "ts-node src/index.ts",
+    "start:dev": "nodemon src/index.ts",
     "build:dev": "tsc --watch --preserveWatchOutput",
-    "migrate:latest": "knex migrate:latest --knexfile src/db/knexfile.ts",
-    "migrate:rollback": "knex migrate:rollback --knexfile src/db/knexfile.ts",
-    "migrate:make": "knex --knexfile src/db/knexfile.ts migrate:make",
-    "dev": "yarn start:dev"
+    "migrate:latest": "knex migrate:latest --knexfile knexfile.ts",
+    "migrate:rollback": "knex migrate:rollback --knexfile knexfile.ts",
+    "migrate:make": "knex --knexfile knexfile.ts migrate:make",
+    "migrate:list": "knex --knexfile knexfile.ts migrate:list",
+    "dev": "yarn start:dev",
+    "start": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.19.0",
     "@types/cors": "^2.8.9",
@@ -26,6 +29,7 @@
     "@types/node": "^14.14.21",
     "@types/sqlite3": "^3.1.6",
     "@types/uuid": "^8.3.0",
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
