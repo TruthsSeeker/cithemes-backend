@@ -11,6 +11,7 @@ import {knex} from './db/database'
 
 const app = express()
 app.use(cors())
+app.use(express.json())
 app.use('/api/', MasterRouter)
 knex.migrate.latest().then(() => {
     console.log("All database migrations done")

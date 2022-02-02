@@ -21,6 +21,15 @@ class SpotifyRouter {
                 res.status(500).json({error:err})
             }
         })
+
+        this.router.post("/search", async (req, res, next) => {
+            try {
+                res.status(200).json(await this._controller.search(req))
+            } catch (err) {
+                console.log(err)
+                res.status(500).json({error:err})
+            }
+        })
     }
 }   
 
