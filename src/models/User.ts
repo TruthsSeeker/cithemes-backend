@@ -28,11 +28,11 @@ export class User {
         }
         this.data.password = this._hashPassword(this.data.password)
         let exists = await knex<IUser>('users').first().where('email', this.data.email)
-            if (!exists) {
-                let success = await knex<IUser>('users').insert(this.data)
-            } else {
-                throw "User already exists"
-            }
+        if (!exists) {
+            let success = await knex<IUser>('users').insert(this.data)
+        } else {
+            throw "User already exists"
+        }
     }
     
     async save() {

@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Request } from "express";
 import cache from 'memory-cache';
 import { SpotifyTokenResponse } from "../apis/spotify/types/SpotifyTokenResponse";
-
+import { Convert } from "../apis/spotify/types/SpotifyQuery";
 
 class SpotifyController {
     private _formattedAuthorization: string = Buffer.from(process.env.SPOTIFY_CLIENT_ID + ":" + process.env.SPOTIFY_CLIENT_SECRET).toString("base64");
@@ -17,8 +17,6 @@ class SpotifyController {
         let response: AxiosResponse<SpotifyTokenResponse> = await axios.post("https://accounts.spotify.com/api/token", searchParams, { headers: requestHeaders })
         this._cacheToken(response.data)
         return response.data.access_token
-
-        
     }
 
     async search(req: Request) {
@@ -29,7 +27,8 @@ class SpotifyController {
         searchParams.append("type", "track,artist")
         
         let response = await axios.get("https://api.spotify.com/v1/search?" + searchParams.toString(), { headers: headers })
-        return response.data
+        let results = Convert.toSpotifyQuery(JSON.stringify(response.data))
+        return results.tracks.items
     }
 
     private _cacheToken(token: SpotifyTokenResponse) {
