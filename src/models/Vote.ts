@@ -13,6 +13,16 @@ export class Vote {
         this.data = vote;
     }
 
+    static async find(id: number) {
+        let result = await knex<IVote>('votes').first().where('id', id)
+        
+        if (!!result) {
+            return result
+        } else {
+            throw new Error(`No corresponding entry found for ${id}`)
+        } 
+    }
+
     async create() {
         let exists = await knex<IVote>('votes').first().where({
             song_id: this.data.song_id,
@@ -32,6 +42,7 @@ export class Vote {
         })
         if (!!result) {
             this.data = result
+            return result
         } else {
             throw new Error(`No corresponding vote found`)
         }
