@@ -1,9 +1,7 @@
 import { knex } from '../db/database'
 
 export interface ICity {
-    id?:number,
-    name:string,
-    country:string,
+    id?:number
 }
 
 export class City {
@@ -30,6 +28,10 @@ export class City {
         } else {
             throw new Error(`City already exists`)
         }
+    }
+
+    async update() {
+        await knex<ICity>('cities').where('id', this.data.id).update(this.data)
     }
 
     async delete() {
