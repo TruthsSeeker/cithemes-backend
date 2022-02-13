@@ -6,14 +6,11 @@ dotenv.config({
     path: '.env'
 })
 import MasterRouter from './routers/MasterRouter'
-import {knex} from './db/database'
+import {knex} from './db/knexfile'
 
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 app.use('/api/', MasterRouter)
-knex.migrate.latest().then(() => {
-    console.log("All database migrations done")
-    app.listen(process.env.APP_PORT, ()=>console.log(`> Listening on port ${process.env.APP_PORT}`))
-})
+app.listen(process.env.APP_PORT, ()=>console.log(`> Listening on port ${process.env.APP_PORT}`))

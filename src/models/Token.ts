@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import {v4 as uuid} from 'uuid'
-import { knex } from '../db/database';
+import { knex } from '../db/knexfile';
 import { IUser, User } from './User';
 
 export interface IToken {

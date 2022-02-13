@@ -6,10 +6,10 @@
   "scripts": {
     "start:dev": "nodemon src/index.ts",
     "build:dev": "tsc --watch --preserveWatchOutput",
-    "migrate:latest": "knex migrate:latest --knexfile knexfile.js",
-    "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
-    "migrate:make": "knex --knexfile knexfile.js migrate:make",
-    "migrate:list": "knex --knexfile knexfile.js migrate:list",
+    "migrate:latest": "knex --knexfile src/db/knexfile.ts migrate:latest ",
+    "migrate:rollback": "knex --knexfile src/db/knexfile.ts migrate:rollback",
+    "migrate:make": "knex --knexfile src/db/knexfile.ts migrate:make",
+    "migrate:list": "knex --knexfile src/db/knexfile.ts migrate:list",
     "dev": "yarn start:dev",
     "start": "ts-node src/index.ts"
   },

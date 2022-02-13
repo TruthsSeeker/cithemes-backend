@@ -1,13 +1,13 @@
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
-import { knex } from '../db/database';
+import { knex } from '../db/knexfile';
 import { emailRegex, passwordRegex } from '../utils/validators';
 
 export interface IUser {
-    email: string,
-    password: string,
-    uuid?: string,
+    email: string;
+    password: string;
+    uuid?: string;
 }
 
 export class User {

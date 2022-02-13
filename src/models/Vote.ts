@@ -1,9 +1,9 @@
-import { knex } from '../db/database'
+import { knex } from '../db/knexfile'
 
 export interface IVote {
-    song_id: number,
-    user_id: string,
-    id?: number,
+    song_id: number;
+    user_id: string;
+    id?: number;
 }
 
 export class Vote {
@@ -17,7 +17,7 @@ export class Vote {
         let result = await knex<IVote>('votes').first().where('id', id)
         
         if (!!result) {
-            return result
+            return new Vote(result)
         } else {
             throw new Error(`No corresponding entry found for ${id}`)
         } 

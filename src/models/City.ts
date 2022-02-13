@@ -1,7 +1,9 @@
-import { knex } from '../db/database'
+import { knex } from '../db/knexfile'
 
 export interface ICity {
-    id?:number
+    id?:number;
+    name:string;
+    country:string;
 }
 
 export class City {
@@ -15,7 +17,7 @@ export class City {
         let result = await knex<ICity>('cities').first().where('id', id)
 
         if (!!result) {
-            return result
+            return new City(result)
         } else {
             throw new Error(`No corresponding entry found for ${id}`)
         } 

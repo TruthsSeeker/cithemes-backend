@@ -1,5 +1,5 @@
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-import { knex } from '../db/database'
+import { knex } from '../db/knexfile'
 
 export interface IPlaylistEntry {
     id?: number,
@@ -15,11 +15,11 @@ export class PlaylistEntry {
         this.data = playlistentry;
     }
     
-    static async find(id: number): Promise<IPlaylistEntry> {
+    static async find(id: number): Promise<PlaylistEntry> {
         let result = await knex<IPlaylistEntry>('playlist_entries').first().where('id', id)
 
         if (!!result) {
-            return result
+            return new PlaylistEntry(result)
         } else {
             throw new Error(`No corresponding entry found for ${id}`)
         }
