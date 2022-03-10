@@ -33,7 +33,6 @@ export async function up(knex: Knex): Promise<void> {
         t.foreign('song_id').references('id').inTable('playlist_entries')
         t.string('user_id')
         t.foreign('user_id').references('uuid').inTable('users')
-
     })
 }
 

@@ -21,7 +21,11 @@ class SongsController {
     }
 
     async search(req: Request) {
+        
+    }
 
+    async addToPlaylist(req: Request) {
+        
     }
 }
 
