@@ -32,10 +32,10 @@ export function convert(query: SpotifyQuery): ISpotifySearchResult[] {
             score: 0,
             release: track?.album?.release_date,
             duration: track.duration_ms,
-            preview: track.preview_url ?? "",
+            preview: track.preview_url ?? undefined,
             originalSuggestion: "",
             spotifyURI: track?.external_urls?.spotify,
-            albumCoverURL: track?.album?.images?.find(e=>true)?.url ?? "",
+            albumCoverURL: track?.album?.images?.find(e=>true)?.url ?? undefined,
         }
         return result
     }) ?? []
