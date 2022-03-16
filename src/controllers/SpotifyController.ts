@@ -8,7 +8,7 @@ import { convert as convertToResponse }  from "../apis/spotify/types/SpotifySear
 class SpotifyController {
     private _formattedAuthorization: string = Buffer.from(process.env.SPOTIFY_CLIENT_ID + ":" + process.env.SPOTIFY_CLIENT_SECRET).toString("base64");
  
-    async auth(req: Request) {
+    async auth() {
         let requestHeaders = { 
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Basic " + this._formattedAuthorization
@@ -20,11 +20,11 @@ class SpotifyController {
         return response.data.access_token
     }
 
-    async search(req: Request) {
-        let headers = await this._getAuthHeaders(req)
+    async search(query: string) {
+        let headers = await this._getAuthHeaders()
 
         let searchParams = new URLSearchParams()
-        searchParams.append("q", req.body.query)
+        searchParams.append("q", query)
         searchParams.append("type", "track,artist")
         
         let response: AxiosResponse<SpotifyQuery> = await axios.get("https://api.spotify.com/v1/search?" + searchParams.toString(), { headers: headers })
@@ -38,9 +38,9 @@ class SpotifyController {
         cache.put("SpotifyToken", token.access_token, token.expires_in * 1000)
     }
 
-    private async _getAuthHeaders(req: Request) {
+    private async _getAuthHeaders() {
         if (!cache.get("SpotifyToken")) {
-            await this.auth(req)
+            await this.auth()
         }
         return {
             "Content-Type": "application/json",

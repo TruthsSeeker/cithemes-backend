@@ -6,7 +6,6 @@ export interface ISong {
     album:string;
     artist:string;
     spotify_id:string;
-    applemusic_id:string;
 }
 
 export class Song {
@@ -23,7 +22,14 @@ export class Song {
             return new Song(result)
         } else {
             throw new Error(`No corresponding entry found for ${id}`)
-        } 
+        }
+    }
+
+    static async search(query: string) {
+        return await knex<ISong>('songs')
+            .where('artist', 'like', "%" + query + "%")
+            .orWhere('title', 'like',  "%" + query + "%")
+            .orWhere('album', 'like', "%" + query + "%")
     }
 
     async create() {
@@ -48,4 +54,5 @@ export class Song {
             throw new Error(`No id provided`)
         }
     }
+
 }

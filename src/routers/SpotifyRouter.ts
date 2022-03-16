@@ -16,7 +16,7 @@ class SpotifyRouter {
     async _configure() {
         this.router.get('/auth', async (req, res, next) => {
             try {
-                res.status(200).json(await this._controller.auth(req))
+                res.status(200).json(await this._controller.auth())
             } catch (err) {
                 res.status(500).json({error:err})
             }
@@ -24,7 +24,7 @@ class SpotifyRouter {
 
         this.router.post("/search", async (req, res, next) => {
             try {
-                res.status(200).json(await this._controller.search(req))
+                res.status(200).json(await this._controller.search(req.body.query as string))
             } catch (err) {
                 console.log(err)
                 res.status(500).json({error:err})
