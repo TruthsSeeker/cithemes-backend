@@ -32,8 +32,12 @@ export class Song {
             .orWhere('album', 'like', "%" + query + "%")
     }
 
+    static async createAll(songs: ISong[]){
+        await knex<ISong>('songs').insert(songs).onConflict('spotify_id').merge()
+    }
+
     async create() {
-        let exists = await knex<ISong>('songs').first().where(this.data)
+        let exists = await knex<ISong>('songs').first().where('spotify_id', this.data.spotify_id)
         if (!exists) {
             this.data = await knex<ISong>('songs').insert(this.data)
         } else {

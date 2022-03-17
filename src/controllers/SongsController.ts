@@ -40,14 +40,18 @@ class SongsController {
                     !internalResults
                         .find(v => result.spotify_id === v.spotify_id)
                 }))
-            //TODO: Add transformedResults to Song DB
+            await Song.createAll(transformedResults)
             internalResults.push(...transformedResults)
         }
         return internalResults
     }
 
     async addToPlaylist(req: Request) {
-        
+        let songId: number = req.body.song_id
+        let cityId: number = req.body.city_id
+
+        let entry = new PlaylistEntry({song_id: songId, city_id: cityId, votes: 0})
+        await entry.create()
     }
 }
 
