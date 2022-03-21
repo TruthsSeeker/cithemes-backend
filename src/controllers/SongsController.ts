@@ -1,5 +1,4 @@
 import { Request } from "express";
-import { ISpotifySearchResult } from "../apis/spotify/types/SpotifySearchResults";
 import { IVoteRequest } from '../apis/types/SongRequests'
 import { PlaylistEntry } from "../models/PlaylistEntry";
 import { ISong, Song } from "../models/Song";
@@ -27,23 +26,15 @@ class SongsController {
             let internalResults = await Song.search(query)
             if (internalResults.length < 20) {
                 let spotifyResults = (await SpotifyController.search(query)).result
-                let transformedResults: ISong[] = spotifyResults
-                    .map((result) => {
-                        return {
-                            title: result.title ?? "",
-                            album: result.album ?? "",
-                            artist: result.artist ?? "",
-                            spotify_id: result.id ?? ""
-                        }
-                    })
+                let filteredResults: ISong[] = spotifyResults
                     .filter((result => { // Filter results already present in internalResults
                         let exists =  internalResults
                             .find(v => result.spotify_id === v.spotify_id)
                         return !!!exists
                     }))
-                if (transformedResults.length > 0) {
-                    await Song.createAll(transformedResults)
-                    internalResults.push(...transformedResults)
+                if (filteredResults.length > 0) {
+                    await Song.createAll(filteredResults)
+                    internalResults.push(...filteredResults)
                 }
             }
             return internalResults

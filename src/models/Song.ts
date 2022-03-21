@@ -6,6 +6,11 @@ export interface ISong {
     album:string;
     artist:string;
     spotify_id:string;
+    release:string;
+    duration:number;
+    preview:string;
+    spotify_URI:string;
+    cover:string;
 }
 
 export class Song {
