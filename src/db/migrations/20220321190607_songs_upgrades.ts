@@ -2,11 +2,15 @@ import * as Knex from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    await knex.schema.alterTable('songs', t => {
-        t.dropColumn('duration')
-
-    })
-    await knex.schema.alterTable('songs', t => {
+    await knex.schema.dropTable('songs')
+    await knex.schema.createTable("songs", t => {
+        t.increments('id').primary()
+        t.string('title')
+        t.string('album')
+        t.string('artist')
+        t.string('spotify_id')
+        t.unique(['spotify_id'])
+        t.string('applemusic_id')
         t.string('release')
         t.integer('duration')
         t.string('preview')
@@ -15,18 +19,15 @@ export async function up(knex: Knex): Promise<void> {
     })
 }
 
-
 export async function down(knex: Knex): Promise<void> {
-    await knex.schema.alterTable('songs', t => {
-        t.dropColumn('duration')
-    
-    })
-    await knex.schema.alterTable('songs', t => {
-        t.dropColumn('release')
-        t.dropColumn('duration')
+    await knex.schema.dropTable('songs')
+    await knex.schema.createTable("songs", t => {
+        t.increments('id').primary()
+        t.string('title')
+        t.string('album')
+        t.string('artist')
         t.string('duration')
-        t.dropColumn('preview')
-        t.dropColumn('cover')
-        t.dropColumn('spotify_URI')
+        t.string('spotify_id')
+        t.string('applemusic_id')
     })
 }
