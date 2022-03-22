@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { IVoteRequest } from '../apis/types/SongRequests'
+import { IAddToPlaylistRequest, IVoteRequest } from '../apis/types/SongRequests'
 import { PlaylistEntry } from "../models/PlaylistEntry";
 import { ISong, Song } from "../models/Song";
 import { Vote } from "../models/Vote";
@@ -9,12 +9,12 @@ class SongsController {
     async vote(voteData: IVoteRequest) {
         let vote = new Vote({song_id: voteData.entry_id, user_id: voteData.user_id});
         let entry = await PlaylistEntry.find(voteData.entry_id);
+        await vote.find()
 
         if (voteData.remove) {
-            await vote.find()
             await vote.delete()
             await entry.updateVotes(-1)
-        } else {
+        } else if (!vote.data.id){
             await vote.create()
             await entry.updateVotes(1)
         }
@@ -33,7 +33,7 @@ class SongsController {
                         return !!!exists
                     }))
                 if (filteredResults.length > 0) {
-                    await Song.createAll(filteredResults)
+                    filteredResults = await Song.createAll(filteredResults)
                     internalResults.push(...filteredResults)
                 }
             }
@@ -44,9 +44,12 @@ class SongsController {
         }
     }
 
-    async addToPlaylist(songId: number, cityId: number) {
-        let entry = new PlaylistEntry({song_id: songId, city_id: cityId, votes: 0})
+    async addToPlaylist(data: IAddToPlaylistRequest) {
+        let entry = new PlaylistEntry({song_id: data.song_id, city_id: data.city_id, votes: 0})
         await entry.create()
+        if (!!entry.data.id) {
+            await this.vote({user_id: data.user_id, entry_id: entry.data.id, remove: false})
+        }
     }
 }
 

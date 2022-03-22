@@ -2,7 +2,7 @@ import { knex } from '../db/knexfile'
 
 export interface IVote {
     song_id: number;
-    user_id: string;
+    user_id: number;
     id?: number;
 }
 

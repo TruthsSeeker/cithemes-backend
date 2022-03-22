@@ -39,12 +39,7 @@ export class Song {
     }
 
     static async createAll(songs: ISong[]){
-        try {
-            await knex<ISong>('songs').insert(songs).onConflict('spotify_id').merge()
-        } catch (err) {
-            console.log(err)
-        }
-        // await knex<ISong>('songs').insert(songs)
+        return await knex<ISong>('songs').insert(songs).onConflict('spotify_id').merge().returning("*")
     }
 
     async create() {

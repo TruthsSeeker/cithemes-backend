@@ -1,5 +1,5 @@
 export interface IVoteRequest {
-    user_id: string;
+    user_id: number;
     entry_id: number;
     remove: boolean;
 }
@@ -19,6 +19,7 @@ export interface ISaveSongRequest {
 }
 
 export interface IAddToPlaylistRequest {
-    city_id: string;
-    song_id: string;
+    city_id: number;
+    song_id: number;
+    user_id: number;
 }
