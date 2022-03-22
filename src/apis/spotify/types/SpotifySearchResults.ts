@@ -8,7 +8,7 @@ export function convert(query: SpotifyQuery): ISong[] {
             title: track.name,
             artist: track?.artists?.map(artist => artist?.name ?? "")
                 .reduce((acc, artist, index, array) => {
-                    if (index === array.length - 1) {
+                    if (index === 0) {
                         acc += artist;
                     } else {
                         acc += ", " + artist;
@@ -19,7 +19,7 @@ export function convert(query: SpotifyQuery): ISong[] {
             release: track?.album?.release_date,
             duration: track.duration_ms,
             preview: track.preview_url ?? "",
-            spotify_URI: track?.external_urls?.spotify,
+            spotify_uri: track?.external_urls?.spotify,
             cover: track?.album?.images?.find(e=>true)?.url ?? "",
         }
         return result

@@ -37,7 +37,7 @@ class SongsController {
                     internalResults.push(...filteredResults)
                 }
             }
-            return internalResults
+            return {result:internalResults}
         } catch(err) {
             console.log(err)
             return err

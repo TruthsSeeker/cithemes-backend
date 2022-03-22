@@ -9,7 +9,7 @@ export interface ISong {
     release:string;
     duration:number;
     preview:string;
-    spotify_URI:string;
+    spotify_uri:string;
     cover:string;
 }
 
