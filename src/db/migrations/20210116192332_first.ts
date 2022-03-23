@@ -6,14 +6,14 @@ export async function up(knex: Knex): Promise<void> {
         t.increments('id').primary()
         t.string('email', 100)
         t.string('password', 100)
-        t.string('uuid', 100)
     })
     await knex.schema.createTable('tokens', (t) => {
         t.increments('id').primary()
         t.string('token')
+        t.string('jwtid')
         t.string('email', 100)
-        t.string('user_id')
-        t.foreign('user_id').references('uuid').inTable('users')
+        t.integer('user_id')
+        t.foreign('user_id').references('id').inTable('users')
     })
 }
 

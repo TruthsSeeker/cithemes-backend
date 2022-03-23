@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { IAddToPlaylistRequest } from '../apis/types/SongRequests'
 import SongsController from '../controllers/SongsController'
 
 class SongRouter {
@@ -19,6 +20,15 @@ class SongRouter {
                 res.status(200).json(await this._controller.search(req))
             } catch (err) {
                 res.status(500).json({error: err})
+            }
+        })
+
+        this.router.post("/vote", async (req, res) => {
+            try {
+                let addToPlaylist: IAddToPlaylistRequest = req.body
+                res.status(200).json(await this._controller.addToPlaylist(addToPlaylist))
+            } catch (error) {
+                
             }
         })
     }

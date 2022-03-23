@@ -37,6 +37,19 @@ export class PlaylistEntry {
         }
     }
 
+    async upsert() {
+        let exists = await knex<IPlaylistEntry>('playlist_entries').first().where({
+            song_id: this.data.song_id,
+            city_id: this.data.city_id,
+        })
+        if (!exists) {
+            this.data = await knex<IPlaylistEntry>('playlist_entries').insert(this.data)
+        } else {
+            this.data = exists
+        }
+        console.log(this.data)
+    }
+
     async find() {
         let result = await knex<IPlaylistEntry>('playlist_entries').first().where({
             song_id: this.data.song_id,

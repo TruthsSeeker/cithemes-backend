@@ -9,7 +9,7 @@ class AuthController {
         let passwordCorrect = await user.login()
         if (passwordCorrect) {
             let token = new Token()
-            token.create(user.data!.uuid!, email)
+            token.create(user.data!.id!, email)
             return {token: token.getRefreshToken()}
         } else {
             throw "Invalid email or password"
@@ -21,7 +21,7 @@ class AuthController {
         let user = new User()
         await user.create(email, password)
         let token = new Token()
-        await token.create(user.data!.uuid!, email)
+        await token.create(user.data!.id!, email)
         return {token: token.getRefreshToken()}
     }
 

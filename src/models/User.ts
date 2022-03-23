@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import { knex } from '../db/knexfile';
@@ -7,7 +6,7 @@ import { emailRegex, passwordRegex } from '../utils/validators';
 export interface IUser {
     email: string;
     password: string;
-    uuid?: string;
+    id?: number;
 }
 
 export class User {
@@ -21,7 +20,6 @@ export class User {
         this.data = {
             email: email,
             password: password,
-            uuid:  uuid()
         }
         if (!this._validate()) {
             throw "Invalid user data"
@@ -29,7 +27,12 @@ export class User {
         this.data.password = this._hashPassword(this.data.password)
         let exists = await knex<IUser>('users').first().where('email', this.data.email)
         if (!exists) {
-            let success = await knex<IUser>('users').insert(this.data)
+            try {
+                let result = await knex<IUser>('users').insert(this.data).returning('id')
+                this.data.id = result.pop()
+            } catch (err) {
+                console.log(err)
+            }
         } else {
             throw "User already exists"
         }
@@ -37,7 +40,7 @@ export class User {
     
     async save() {
         if (!!this.data) {
-            await knex<IUser>('users').update(this.data).where('uuid', this.data.uuid)
+            await knex<IUser>('users').update(this.data).where('id', this.data.id)
             
         } else { 
             throw "No user data to save"
@@ -52,7 +55,6 @@ export class User {
         if (!user) {
             throw "Incorrect email or password"
         }
-        this.data!.uuid = user.uuid
         return this._checkPassword(this.data!.password!, user.password!)
     }
 

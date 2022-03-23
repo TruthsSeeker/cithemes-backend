@@ -27,6 +27,7 @@ class AuthRouter {
             try {
                 res.status(200).json(await this._controller.signup(req))
             } catch(e) {
+                console.log(e)
                 res.status(400).json({error: e})
             }
         })

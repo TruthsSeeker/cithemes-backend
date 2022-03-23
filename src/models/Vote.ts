@@ -43,9 +43,7 @@ export class Vote {
         if (!!result) {
             this.data = result
             return result
-        } else {
-            throw new Error(`No corresponding vote found`)
-        }
+        } 
     }
 
     async delete() {

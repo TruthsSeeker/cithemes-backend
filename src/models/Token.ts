@@ -4,7 +4,7 @@ import { knex } from '../db/knexfile';
 import { IUser, User } from './User';
 
 export interface IToken {
-    userId: string,
+    user_id: number;
     email: string,
     token: string,
     parent?: string,
@@ -18,9 +18,9 @@ export default class Token {
         this.data = token
     }
 
-    async create(userId: string, email: string) {
+    async create(userId: number, email: string) {
         let payload: IToken = {
-            userId: userId,
+            user_id: userId,
             email: email,
             token: this.getAccessToken(userId),
             jwtid: uuid()
@@ -73,8 +73,8 @@ export default class Token {
             let payload: IToken = {
                 parent: this.data.jwtid,
                 email: this.data.email,
-                userId: this.data.userId,
-                token: this.getAccessToken(this.data.userId),
+                user_id: this.data.user_id,
+                token: this.getAccessToken(this.data.user_id),
                 jwtid: uuid()
             }
             this.data = payload
@@ -91,11 +91,11 @@ export default class Token {
         } else throw "No token data"
     }
 
-    getAccessToken(uuid: string){
+    getAccessToken(id: number){
         // 1m expiry in dev env, 5 min otherwise
         let jwtExp = process.env.NODE_ENV === 'development' ? '10s' : '10m'
         let payload = {
-            id: uuid
+            id: id
         }
         return jwt.sign(payload , process.env.JWT_SECRET!, {expiresIn: jwtExp})
     }

@@ -31,8 +31,8 @@ export async function up(knex: Knex): Promise<void> {
         t.increments('id').primary()
         t.integer('song_id')
         t.foreign('song_id').references('id').inTable('playlist_entries')
-        t.string('user_id')
-        t.foreign('user_id').references('uuid').inTable('users')
+        t.integer('user_id')
+        t.foreign('user_id').references('id').inTable('users')
     })
 }
 
