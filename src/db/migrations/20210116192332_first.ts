@@ -11,6 +11,7 @@ export async function up(knex: Knex): Promise<void> {
         t.increments('id').primary()
         t.string('token')
         t.string('jwtid')
+        t.string('parent')
         t.string('email', 100)
         t.integer('user_id')
         t.foreign('user_id').references('id').inTable('users')

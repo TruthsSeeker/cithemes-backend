@@ -55,6 +55,7 @@ export class User {
         if (!user) {
             throw "Incorrect email or password"
         }
+        this.data.id = user.id
         return this._checkPassword(this.data!.password!, user.password!)
     }
 

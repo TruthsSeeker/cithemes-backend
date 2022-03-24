@@ -28,7 +28,7 @@ class AuthController {
     async refresh(req: Request) {
         let payload = req.payload as IToken
         let token = new Token(payload)
-        return await token.refreshToken()
+        return {token: await token.refreshToken()}
         
     }
 
