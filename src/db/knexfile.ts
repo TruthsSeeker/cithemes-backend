@@ -37,6 +37,10 @@ const knexConfig: KnexConfig = {
 
     staging: {
         ...defaults,
+        client: 'pg',
+        connection: {
+            host: process.env.DATABASE_URL
+        },
         useNullAsDefault: true,
         debug: true,
     },
