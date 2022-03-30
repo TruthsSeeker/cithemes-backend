@@ -19,7 +19,7 @@ const defaults = {
     },
     migrations: {
         tableName: 'knex_migrations',
-        directory: 'migrations'
+        directory: path.join(__dirname,'migrations')
     },
 }
 
