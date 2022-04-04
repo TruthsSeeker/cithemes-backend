@@ -38,7 +38,10 @@ const knexConfig: KnexConfig = {
     staging: {
         ...defaults,
         client: 'pg',
-        connection: process.env.DATABASE_URL,
+        connection: {
+            connection_string: process.env.DATABASE_URL,
+            ssl: {rejectUnauthorized: false}
+        },
         useNullAsDefault: true,
         debug: true,
     },
