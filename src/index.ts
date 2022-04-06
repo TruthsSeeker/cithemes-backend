@@ -6,7 +6,6 @@ dotenv.config({
     path: '.env'
 })
 import MasterRouter from './routers/MasterRouter'
-import {knex} from './db/knexfile'
 
 
 const app = express()

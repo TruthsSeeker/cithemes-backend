@@ -2,7 +2,6 @@ import * as Knex from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    await knex.schema.dropTable('songs')
     await knex.schema.createTable("songs", t => {
         t.increments('id').primary()
         t.string('title')
@@ -21,13 +20,4 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
     await knex.schema.dropTable('songs')
-    await knex.schema.createTable("songs", t => {
-        t.increments('id').primary()
-        t.string('title')
-        t.string('album')
-        t.string('artist')
-        t.string('duration')
-        t.string('spotify_id')
-        t.string('applemusic_id')
-    })
 }
