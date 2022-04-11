@@ -21,6 +21,15 @@ class CityRouter {
                 res.status(500).json({error: err})
             }
         })
+
+        this.router.get("/:id/playlist", async (req, res) => {
+            try {
+                let id = parseInt(req.params.id)
+                res.status(200).json(await this._controller.getPlaylist(id))
+            } catch (err) {
+                res.status(500).json({error: err})
+            }
+        })
     }
     
 }
