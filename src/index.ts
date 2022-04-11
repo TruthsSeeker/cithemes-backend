@@ -11,5 +11,5 @@ import MasterRouter from './routers/MasterRouter'
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use('/api/', MasterRouter)
+app.use('/', MasterRouter)
 app.listen(process.env.APP_PORT, ()=>console.log(`> Listening on port ${process.env.APP_PORT}`))
