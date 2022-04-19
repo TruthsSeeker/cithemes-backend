@@ -6,7 +6,6 @@ import { IUser, User } from './User';
 export interface IToken {
     user_id: number;
     email: string,
-    token: string,
     parent?: string,
     jwtid: string
 }
@@ -22,7 +21,6 @@ export default class Token {
         let payload: IToken = {
             user_id: userId,
             email: email,
-            token: this.getAccessToken(userId),
             jwtid: uuid()
         }
         this.data = payload
@@ -44,12 +42,9 @@ export default class Token {
 
         let isParent = await knex<IToken>('tokens').first().where('parent', this.data?.jwtid)
         if (!!isParent) {
-            try {
-                await this.invalidate()
-                return false
-            } catch(e) {
-                throw e
-            }
+            await this.invalidate()
+            return false
+
         }
 
         return true
@@ -74,7 +69,6 @@ export default class Token {
                 parent: this.data.jwtid,
                 email: this.data.email,
                 user_id: this.data.user_id,
-                token: this.getAccessToken(this.data.user_id),
                 jwtid: uuid()
             }
             this.data = payload
@@ -91,13 +85,14 @@ export default class Token {
         } else throw "No token data"
     }
 
-    getAccessToken(id: number){
-        // 1m expiry in dev env, 5 min otherwise
-        let jwtExp = process.env.NODE_ENV === 'development' ? '10s' : '10m'
-        let payload = {
-            id: id
-        }
-        return jwt.sign(payload , process.env.JWT_SECRET!, {expiresIn: jwtExp})
+    getAccessToken(){
+        if (!!this.data) {
+            let jwtExp = process.env.NODE_ENV === 'development' ? '10s' : '10m'
+            let payload = {
+                id: this.data.user_id
+            }
+            return jwt.sign(payload , process.env.JWT_SECRET!, {expiresIn: jwtExp})
+        } else throw "No token data"
     }
 
 }
