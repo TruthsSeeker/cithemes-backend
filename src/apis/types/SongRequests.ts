@@ -22,4 +22,5 @@ export interface IAddToPlaylistRequest {
     city_id: number;
     song_id: number;
     user_id: number;
+    remove: boolean;
 }

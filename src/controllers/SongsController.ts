@@ -49,8 +49,9 @@ class SongsController {
         let entry = new PlaylistEntry({song_id: data.song_id, city_id: data.city_id, votes: 0})
         await entry.upsert()
         if (!!entry.data.id) {
-            await this.vote({user_id: data.user_id, entry_id: entry.data.id, remove: false})
+            await this.vote({user_id: data.user_id, entry_id: entry.data.id, remove: data.remove})
         }
+        return entry.data.song_id
     }
 }
 
