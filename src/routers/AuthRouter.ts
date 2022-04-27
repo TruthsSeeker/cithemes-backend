@@ -19,7 +19,9 @@ class AuthRouter {
     async _configure() {
         this.router.post('/login', async (req, res) => {
             try {
-                res.status(200).json(await this._controller.login(req))
+                let result = await this._controller.login(req)
+                console.log(result)
+                res.status(200).json(result)
             } catch(e) {
                 res.status(400).json({error: e})
             }

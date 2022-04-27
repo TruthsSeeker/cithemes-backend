@@ -85,7 +85,7 @@ export class PlaylistEntry {
                     title: entry.title,
                     artist: entry.artist,
                     album: entry.album,
-                    spotify_uri: entry.spotify_URI,
+                    spotify_URI: entry.spotify_URI,
                     cover: entry.cover,
                     preview: entry.preview,
                     duration: entry.duration,

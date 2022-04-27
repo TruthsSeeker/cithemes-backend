@@ -17,7 +17,9 @@ class SongRouter {
     async _configure() {
         this.router.post("/search", async (req, res) => {
             try {
-                res.status(200).json(await this._controller.search(req))
+                let result = await this._controller.search(req)
+                console.log(result)
+                res.status(200).json(result)
             } catch (err) {
                 res.status(500).json({error: err})
             }
@@ -26,7 +28,9 @@ class SongRouter {
         this.router.post("/vote", async (req, res) => {
             try {
                 let addToPlaylist: IAddToPlaylistRequest = req.body
-                res.status(200).json(await this._controller.addToPlaylist(addToPlaylist))
+                let result = await this._controller.addToPlaylist(addToPlaylist) 
+                console.log(JSON.stringify(result))
+                res.status(200).json({result:result})
             } catch (error) {
                 
             }
