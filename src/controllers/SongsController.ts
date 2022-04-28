@@ -7,8 +7,8 @@ import SpotifyController from "./SpotifyController";
 
 class SongsController {
     async vote(voteData: IVoteRequest) {
-        let vote = new Vote({song_id: voteData.entry_id, user_id: voteData.user_id});
         let entry = await PlaylistEntry.find(voteData.entry_id);
+        let vote = new Vote({song_id: entry.data.id ?? 0, user_id: voteData.user_id});
         await vote.find()
         console.log(vote.data)
 

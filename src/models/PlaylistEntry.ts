@@ -1,6 +1,7 @@
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { knex } from '../db/knexfile'
 import { ISong } from './Song';
+import { IVote } from './Vote';
 
 export interface IPlaylistEntry {
     id?: number,
@@ -79,6 +80,7 @@ export class PlaylistEntry {
                 id: entry.id,
                 city_id: entry.city_id,
                 votes: entry.votes,
+                voted: false,
                 song_info: {
                     id: entry.song_id,
                     title: entry.title,
@@ -105,19 +107,24 @@ export class PlaylistEntry {
         let result = await knex('playlist_entries').where({
             city_id: city_id,
         })
-        .innerJoin('songs', 'playlist_entries.song_id', 'songs.id')
-        .leftOuterJoin('votes', (q) => {
-            q.on('votes.song_id', 'playlist_entries.id').onIn('votes.user_id', [user_id])
-        })
+        .innerJoin('songs', 'songs.id', 'playlist_entries.song_id')
+        // .leftOuterJoin('votes', (q) => {
+        //     q.on('votes.song_id', 'playlist_entries.id').onIn('votes.user_id', [user_id])
+        // })
+        .select('playlist_entries.*', 'songs.title', 'songs.artist', 'songs.album', 'songs.spotify_URI', 'songs.cover', 'songs.preview', 'songs.duration', 'songs.applemusic_id', 'songs.release')
         .limit(100)
         .orderBy('votes', 'desc')
+
+        let votes = await knex<IVote>('votes').where({
+            user_id: user_id,
+        })
 
         result = result.map(entry => {
             return {
                 id: entry.id,
                 city_id: entry.city_id,
                 votes: entry.votes,
-                voted: !!entry.user_id,
+                voted: votes.map(v => v.song_id).includes(entry.id),
                 song_info: {
                     id: entry.song_id,
                     title: entry.title,
