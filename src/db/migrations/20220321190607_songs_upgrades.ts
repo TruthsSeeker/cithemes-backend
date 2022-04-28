@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
         t.integer('duration')
         t.string('preview')
         t.string('cover')
-        t.string('spotify_URI')
+        t.string('spotify_uri')
     })
 }
 

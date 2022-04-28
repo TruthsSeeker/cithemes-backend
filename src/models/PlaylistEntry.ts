@@ -86,7 +86,7 @@ export class PlaylistEntry {
                     title: entry.title,
                     artist: entry.artist,
                     album: entry.album,
-                    spotify_URI: entry.spotify_URI,
+                    spotify_uri: entry.spotify_uri,
                     cover: entry.cover,
                     preview: entry.preview,
                     duration: entry.duration,
@@ -111,7 +111,7 @@ export class PlaylistEntry {
         // .leftOuterJoin('votes', (q) => {
         //     q.on('votes.song_id', 'playlist_entries.id').onIn('votes.user_id', [user_id])
         // })
-        .select('playlist_entries.*', 'songs.title', 'songs.artist', 'songs.album', 'songs.spotify_URI', 'songs.cover', 'songs.preview', 'songs.duration', 'songs.applemusic_id', 'songs.release')
+        .select('playlist_entries.*', 'songs.title', 'songs.artist', 'songs.album', 'songs.spotify_uri', 'songs.cover', 'songs.preview', 'songs.duration', 'songs.applemusic_id', 'songs.release')
         .limit(100)
         .orderBy('votes', 'desc')
 
@@ -130,7 +130,7 @@ export class PlaylistEntry {
                     title: entry.title,
                     artist: entry.artist,
                     album: entry.album,
-                    spotify_URI: entry.spotify_URI,
+                    spotify_uri: entry.spotify_uri,
                     cover: entry.cover,
                     preview: entry.preview,
                     duration: entry.duration,
