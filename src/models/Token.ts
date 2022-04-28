@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import {v4 as uuid} from 'uuid'
 import { knex } from '../db/knexfile';
+import { AuthError } from '../utils/errors';
 import { IUser, User } from './User';
 
 export interface IToken {
@@ -73,9 +74,12 @@ export default class Token {
             }
             this.data = payload
             await this.save()
-            return this.getRefreshToken()
+            return {
+                refresh_token: this.getRefreshToken(),
+                access_token: this.getAccessToken()
+            }
         } else {
-            throw "Refresh token invalid"
+            throw new AuthError('Invalid token')
         }
     }
 

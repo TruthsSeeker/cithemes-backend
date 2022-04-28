@@ -73,7 +73,6 @@ export class PlaylistEntry {
             .innerJoin('songs', 'playlist_entries.song_id', 'songs.id')
             .limit(100)
             .orderBy('votes', 'desc')
-            .debug(true)
 
         result = result.map(entry => {
             return {
@@ -85,7 +84,7 @@ export class PlaylistEntry {
                     title: entry.title,
                     artist: entry.artist,
                     album: entry.album,
-                    spotify_uri: entry.spotify_URI,
+                    spotify_URI: entry.spotify_URI,
                     cover: entry.cover,
                     preview: entry.preview,
                     duration: entry.duration,
@@ -100,6 +99,40 @@ export class PlaylistEntry {
         } else {
             throw new Error(`No corresponding entry found for ${city_id}`)
         }
+    }
+
+    static async findPlaylistWithUser(city_id: number, user_id: number) {
+        let result = await knex('playlist_entries').where({
+            city_id: city_id,
+        })
+        .innerJoin('songs', 'playlist_entries.song_id', 'songs.id')
+        .leftOuterJoin('votes', (q) => {
+            q.on('votes.song_id', 'playlist_entries.id').onIn('votes.user_id', [user_id])
+        })
+        .limit(100)
+        .orderBy('votes', 'desc')
+
+        result = result.map(entry => {
+            return {
+                id: entry.id,
+                city_id: entry.city_id,
+                votes: entry.votes,
+                voted: !!entry.user_id,
+                song_info: {
+                    id: entry.song_id,
+                    title: entry.title,
+                    artist: entry.artist,
+                    album: entry.album,
+                    spotify_URI: entry.spotify_URI,
+                    cover: entry.cover,
+                    preview: entry.preview,
+                    duration: entry.duration,
+                    applemusic_id: entry.applemusic_id,
+                    release: entry.release,
+                },
+            }
+        }) 
+        return result
     }
 
     async update() {
