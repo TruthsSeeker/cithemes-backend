@@ -9,7 +9,10 @@ class CitiesController {
         return await city.create();
     }
 
-    async getPlaylist(id: number) {
+    async getPlaylist(id: number, userId: number|undefined) {
+        if (!!userId) {
+            return {result: await PlaylistEntry.findPlaylistWithUser(id, userId)}
+        }
         return {result: await PlaylistEntry.findPlaylist(id)}
     }
 }
