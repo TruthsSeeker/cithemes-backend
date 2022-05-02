@@ -12,7 +12,7 @@ interface KnexConfig {
 }
 
 const defaults = {
-    client: 'mysql2',
+    client: 'pg',
     connection: {
         host:       process.env.DB_HOST,
         database:   process.env.DB_NAME,
@@ -32,18 +32,11 @@ const defaults = {
 
 const knexConfig: KnexConfig = {
     development: {
-        client: 'mysql2',
-    connection: {
-        host:       process.env.DB_HOST,
-        database:   process.env.DB_NAME,
-        user:       process.env.DB_USER,
-        password:   process.env.DB_PASSWORD,
-        port:       process.env.DB_PORT,
-    },
-    migrations: {
-        tableName: 'knex_migrations',
-        directory: path.join(__dirname,'migrations')
-    },
+        ...defaults,
+        migrations: {
+            tableName: 'knex_migrations',
+            directory: path.join(__dirname,'migrations')
+        },
         useNullAsDefault: true
     },
 
