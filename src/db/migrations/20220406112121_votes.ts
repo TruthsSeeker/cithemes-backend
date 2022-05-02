@@ -1,13 +1,10 @@
-import * as Knex from "knex";
-
+import {Knex} from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("votes", t => {
         t.increments('id').primary()
-        t.integer('song_id')
-        t.foreign('song_id').references('id').inTable('playlist_entries')
-        t.integer('user_id')
-        t.foreign('user_id').references('id').inTable('users')
+        t.integer('song_id').unsigned().references('playlist_entries.id')
+        t.integer('user_id').unsigned().references('users.id')
     })
 }
 

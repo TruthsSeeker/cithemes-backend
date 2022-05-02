@@ -1,5 +1,4 @@
-import * as Knex from "knex";
-
+import {Knex} from "knex";
 
 export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable('users', t => {
@@ -13,8 +12,8 @@ export async function up(knex: Knex): Promise<void> {
         t.string('jwtid')
         t.string('parent')
         t.string('email', 100)
-        t.integer('user_id')
-        t.foreign('user_id').references('id').inTable('users')
+        t.integer('user_id').unsigned().references('users.id')
+        // t.foreign('user_id').references('users.id')
     })
 }
 
