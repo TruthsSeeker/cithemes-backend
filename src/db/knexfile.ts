@@ -1,17 +1,24 @@
 import Knex from "knex"
 import path from "path"
 
+import dotenv from 'dotenv'
+
+dotenv.config({
+    path: '../../.env'
+})
+
 interface KnexConfig {
     [key: string]: object
 }
 
 const defaults = {
-    client: 'mysql',
+    client: 'pg',
     connection: {
-        host: process.env.DATABASE_URL,
-        database: process.env.DATABASE_NAME,
-        user:     process.env.DATABASE_USER,
-        password: process.env.DATABASE_PASSWORD
+        host:       process.env.DB_HOST,
+        database:   process.env.DB_NAME,
+        user:       process.env.DB_USER,
+        password:   process.env.DB_PASSWORD,
+        port:       process.env.DB_PORT,
     },
     pool: {
         min: 2,
@@ -25,12 +32,10 @@ const defaults = {
 
 const knexConfig: KnexConfig = {
     development: {
-        client: 'sqlite3',
-        connection: {
-        filename: path.join(__dirname,'dev.sqlite3')
-        },
+        ...defaults,
         migrations: {
-        directory: path.join(__dirname,'migrations')
+            tableName: 'knex_migrations',
+            directory: path.join(__dirname,'migrations')
         },
         useNullAsDefault: true
     },

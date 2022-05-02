@@ -32,7 +32,8 @@ class SongRouter {
                 console.log(JSON.stringify(result))
                 res.status(200).json({result:result})
             } catch (error) {
-                
+                console.log(error)
+                res.status(500).json({error: error})
             }
         })
     }

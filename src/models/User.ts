@@ -29,7 +29,7 @@ export class User {
         if (!exists) {
             try {
                 let result = await knex<IUser>('users').insert(this.data).returning('id')
-                this.data.id = result.pop()
+                this.data.id = result.pop()?.id
             } catch (err) {
                 console.log(err)
             }
