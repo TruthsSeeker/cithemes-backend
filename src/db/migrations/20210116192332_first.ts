@@ -12,13 +12,12 @@ export async function up(knex: Knex): Promise<void> {
         t.string('parent')
         t.string('email', 100)
         t.integer('user_id').references('users.id')
-        // t.foreign('user_id').references('users.id')
     })
 }
 
 
 export async function down(knex: Knex): Promise<void> {
-    await knex.schema.dropTable('users')
     await knex.schema.dropTable('tokens')
+    await knex.schema.dropTable('users')
 }
 
