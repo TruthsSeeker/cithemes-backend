@@ -28,7 +28,11 @@ const defaults = {
         tableName: 'knex_migrations',
         directory: path.join(__dirname,'migrations')
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    seeds: {
+        directory: path.join(__dirname,'seeds'),
+        extension: 'ts'
+    }
 }
 
 const knexConfig: KnexConfig = {

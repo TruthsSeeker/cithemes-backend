@@ -7,7 +7,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string('name_ascii');
     table.string('name_alt');
     table.string('capital');
-    table.specificType('center', 'point');
+    table.double('lat');
+    table.double('lng');
     table.integer('population');
   });
 }

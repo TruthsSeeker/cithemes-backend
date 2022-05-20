@@ -1,30 +1,36 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {parse} from 'csv-parse';
-type City = {
-  id: number;
-  name: string;
-  country: string;
-  population: number;
-  center: string,
-  iso2: string,
-  name_ascii: string,
-  name_alt: string,
-  capital: string,
-}
-export default function readCitiesCSV() {
-  const filePath = path.join(__dirname, '../../../data/cities.csv');
-  const file = fs.readFileSync(filePath, 'utf8');
+
+
+export default async function readCitiesCSV(){
+xconst filePath = path.join(__dirname, '../../data/cities.csv');
   const headers = ['id','name','name_ascii','country','iso2','iso3','name_alt','capital','population','center'];
+  let cities: any[] = []
 
-  parse(file, {
-    delimiter: ',',
-    columns: headers,
-  }, (err, data: City[]) => {
-    if (err) {
-      console.error(err);
+  const parser = fs.createReadStream(filePath)
+  .pipe(
+    parse({
+      delimiter: ',',
+      columns: headers,
+    })
+  )
+  for await (const row of parser) {
+    let city = {
+      name: row.name,
+      country: row.country,
+      population: row.population,
+      center: "point(" + row.center + ")",
+      iso2: row.iso2,
+      name_ascii: row.name_ascii,
+      name_alt: row.name_alt,
+      capital: row.capital,
     }
-    console.log(data);
-  });
+    cities.push(city);
+  }
+  return cities;
+}
 
-};
+readCitiesCSV().then(cities => {
+  console.log(cities);
+})

@@ -10,6 +10,9 @@
     "migrate:rollback": "knex --knexfile src/db/knexfile.ts migrate:rollback",
     "migrate:make": "knex --knexfile src/db/knexfile.ts migrate:make",
     "migrate:list": "knex --knexfile src/db/knexfile.ts migrate:list",
+    "seed:run": "knex --knexfile src/db/knexfile.ts seed:run",
+    "seed:make": "knex --knexfile src/db/knexfile.ts seed:make",
+    "seed:cities": "sudo bash data/import_cities.sh",
     "dev": "yarn start:dev",
     "start": "ts-node src/index.ts"
   },
@@ -36,7 +39,6 @@
     "better-sqlite3": "^7.5.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "csv-parse": "^5.0.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
