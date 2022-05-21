@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Request } from "express";
+import {knex} from "../db/knexfile";
 import { ForwardGeocodeResponse } from "../apis/types/CityRequests";
 import { City } from "../models/City";
 import { PlaylistEntry } from "../models/PlaylistEntry";
@@ -34,6 +35,12 @@ class CitiesController {
     }).map((result) => {
         
     })
+  }
+
+  async findNeareast(lat: number, lng: number) {
+    return await knex('cities').select("*").orderByRaw(`
+      point(?, ?) <-> center ASC
+    `, [lng, lat]).limit(10);
   }
 }
 

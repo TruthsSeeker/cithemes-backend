@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
     table.double('lat');
     table.double('lng');
     table.integer('population');
+    table.specificType('center', 'point')
   });
 }
 
@@ -20,8 +21,10 @@ export async function down(knex: Knex): Promise<void> {
     table.dropColumn('name_ascii');
     table.dropColumn('name_alt');
     table.dropColumn('capital');
-    table.dropColumn('center');
+    table.dropColumn('lat');
+    table.dropColumn('lng')
     table.dropColumn('population');
+    table.dropColumn('center')
   });
 }
 

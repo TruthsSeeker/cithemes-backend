@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import {v4 as uuid} from 'uuid'
 import { knex } from '../db/knexfile';
 import { AuthError } from '../utils/errors';
-import { IUser, User } from './User';
 
 export interface IToken {
     user_id: number;
