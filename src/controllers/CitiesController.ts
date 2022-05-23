@@ -1,17 +1,7 @@
-import axios, { AxiosResponse } from "axios";
-import { Request } from "express";
-import {knex} from "../db/knexfile";
-import { ForwardGeocodeResponse } from "../apis/types/CityRequests";
-import { City } from "../models/City";
+import { City, ICity } from "../models/City";
 import { PlaylistEntry } from "../models/PlaylistEntry";
 
 class CitiesController {
-  async create(req: Request) {
-    const { name, country } = req.body;
-    const city = new City({ name, country });
-    return await city.create();
-  }
-
   async getPlaylist(id: number, userId: number | undefined) {
     if (!!userId) {
       return { result: await PlaylistEntry.findPlaylistWithUser(id, userId) };
@@ -19,28 +9,34 @@ class CitiesController {
     return { result: await PlaylistEntry.findPlaylist(id) };
   }
 
-  async findCity(query: string) {
-    let forwardGeocodingResponse: AxiosResponse<ForwardGeocodeResponse[]> =
-      await axios.get(`https://geocode.maps.co/search?q=${query}&limit=5`);
-    let typeCheckNeeded = forwardGeocodingResponse.data.filter((result) => {
-        let validTypes = ["town", "city", "village", "hamlet"];
-        return !validTypes.includes(result.type);
-    })
-    if (typeCheckNeeded.length > 0) {
-        //TODO: Forward geocode
-    }
-    let validResults = forwardGeocodingResponse.data.filter((result) => {
-        let validTypes = ["town", "city", "village", "hamlet"];
-        return validTypes.includes(result.type);
-    }).map((result) => {
-        
-    })
-  }
+  async findCity(query: string) {}
 
-  async findNeareast(lat: number, lng: number) {
-    return await knex('cities').select("*").orderByRaw(`
-      point(?, ?) <-> center ASC
-    `, [lng, lat]).limit(10);
+  async getImages(cities: ICity[]) {}
+
+  async nearestCities(lat: number, lng: number) {
+    let result = await City.findNeareast(lat, lng);
+
+    //Memoize distance ordering
+    let hashedResult = [];
+    for (let i = 0; i < result.length; i++) {
+      let city = {
+        cityId: result[i].id,
+        id: i,
+      };
+      hashedResult.push(city);
+    }
+
+    let hasImages = result.filter((city) => !!city.image);
+    let needsImages = result.filter((city) => !city.image);
+    if (needsImages.length > 0) {
+      await this.getImages(needsImages);
+    }
+    let resultWithImages = hasImages.concat(needsImages);
+
+    // Return results sorted by distance
+    return hashedResult.map((hash) => {
+      return resultWithImages.find((city) => city.id === hash.cityId);
+    });
   }
 }
 

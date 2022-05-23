@@ -14,14 +14,6 @@ class CityRouter {
   }
 
   async _configure() {
-    this.router.post("/create", async (req, res) => {
-      try {
-        res.status(200).json(await this._controller.create(req));
-      } catch (err) {
-        res.status(500).json({ error: err });
-      }
-    });
-
     this.router.get("/:id/playlist", async (req, res) => {
       try {
         let id = parseInt(req.params.id);
