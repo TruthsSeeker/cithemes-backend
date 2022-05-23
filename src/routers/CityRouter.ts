@@ -43,7 +43,7 @@ class CityRouter {
       try {
         let lat = parseFloat(req.params.lat);
         let lng = parseFloat(req.params.lng);
-        let result = await this._controller.findNeareast(lat, lng);
+        let result = await this._controller.nearestCities(lat, lng);
         res.status(200).json(result);
       } catch (err) {
         res.status(500).json({ error: err });
