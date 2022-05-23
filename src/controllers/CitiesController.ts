@@ -1,6 +1,8 @@
+import { PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { City, ICity } from "../models/City";
 import { PlaylistEntry } from "../models/PlaylistEntry";
-
+import { upload as uploadCDN } from "../apis/cdn/upload-cdn";
+import * as fs from 'fs';
 class CitiesController {
   async getPlaylist(id: number, userId: number | undefined) {
     if (!!userId) {
@@ -11,7 +13,25 @@ class CitiesController {
 
   async findCity(query: string) {}
 
-  async getImages(cities: ICity[]) {}
+  async getImages(cities: ICity[]): Promise<ICity[]> {
+    return cities;
+  }
+
+  async uploadImage() {
+    console.log("Uploading image");
+    let image = Buffer.from(fs.readFileSync("src/assets/LosAngeles.jpg"));
+    console.log(image)
+    let params: PutObjectCommandInput = {
+      Bucket: process.env.SPACE_BUCKET,
+      Key: "city-images/test.jpg",
+      Body: image,
+      ACL: "public-read",
+      ContentType: "image/jpeg",
+    }
+
+    await uploadCDN(params);
+    return {"url": process.env.CDN_URL + "city-images/test.jpg"}
+  }
 
   async nearestCities(lat: number, lng: number) {
     let result = await City.findNeareast(lat, lng);
@@ -29,7 +49,7 @@ class CitiesController {
     let hasImages = result.filter((city) => !!city.image);
     let needsImages = result.filter((city) => !city.image);
     if (needsImages.length > 0) {
-      await this.getImages(needsImages);
+      needsImages = await this.getImages(needsImages);
     }
     let resultWithImages = hasImages.concat(needsImages);
 

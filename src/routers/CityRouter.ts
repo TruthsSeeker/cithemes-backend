@@ -29,7 +29,7 @@ class CityRouter {
       }
     });
 
-    this.router.get("/:query", async (req, res) => {
+    this.router.get("/find/:query", async (req, res) => {
       try {
         let query = req.params.query;
         let result = await this._controller.findCity(query);
@@ -45,6 +45,17 @@ class CityRouter {
         let lng = parseFloat(req.params.lng);
         let result = await this._controller.nearestCities(lat, lng);
         res.status(200).json(result);
+      } catch (err) {
+        res.status(500).json({ error: err });
+      }
+    })
+
+    this.router.get("/upload/", async (req, res) => {
+      
+      try {
+        console.log("Uploading image");
+        let result = await this._controller.uploadImage();
+        res.status(200).json("dickballs");
       } catch (err) {
         res.status(500).json({ error: err });
       }
