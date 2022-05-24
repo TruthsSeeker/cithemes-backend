@@ -17,6 +17,7 @@ class CitiesController {
   async findCity(query: string) {}
 
   async getImages(cities: ICity[]) {
+
     let result: ICity[] = [];
 
     let places = await Promise.all(
@@ -31,7 +32,7 @@ class CitiesController {
       Accept: "image/*",
     };
     let baseURL = "https://maps.googleapis.com/maps/api/place/photo";
-    places.forEach(async (place) => {
+    for (var place of places) {
       let reference = place.candidate.photos[0].photo_reference;
       let url =
         baseURL +
@@ -54,7 +55,7 @@ class CitiesController {
       let model = new City(city);
       await model.update();
       result.push(city);
-    });
+    }
     return result;
   }
 
