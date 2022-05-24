@@ -49,7 +49,7 @@ class CitiesController {
       let imageName = city.name_ascii.replace(/\s/g, "_") + "." + type;
 
 
-      let cdnUrl = await this.uploadImage(image, imageName);
+      let cdnUrl = await this.uploadImage(image, imageName, type);
       city.image = cdnUrl;
       let model = new City(city);
       await model.update();
@@ -90,17 +90,17 @@ class CitiesController {
     }
   }
 
-  async uploadImage(data: Buffer, name: string) {
+  async uploadImage(data: Buffer, name: string, format: string) {
     let params: PutObjectCommandInput = {
       Bucket: process.env.SPACE_BUCKET,
       Key: "city-images/" + name,
       Body: data,
       ACL: "public-read",
-      ContentType: "image/jpeg",
+      ContentType: "image/" + format,
     }
 
     await uploadCDN(params);
-    return process.env.CDN_URL + "city-images/test.jpg";
+    return process.env.CDN_URL + "city-images/" + name;
   }
 
   // async uploadImage() {
