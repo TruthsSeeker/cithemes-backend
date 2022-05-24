@@ -3,6 +3,9 @@ import { City, ICity } from "../models/City";
 import { PlaylistEntry } from "../models/PlaylistEntry";
 import { upload as uploadCDN } from "../apis/cdn/upload-cdn";
 import * as fs from 'fs';
+import axios, { AxiosResponse } from "axios";
+import { Candidate, FindPlaceResponse } from "../apis/places/types/PlacesTypes";
+import { ApiError } from "../utils/errors";
 class CitiesController {
   async getPlaylist(id: number, userId: number | undefined) {
     if (!!userId) {
@@ -13,24 +16,83 @@ class CitiesController {
 
   async findCity(query: string) {}
 
-  async getImages(cities: ICity[]): Promise<ICity[]> {
-    return cities;
+  async getImages(cities: ICity[]){
+    let result: ICity[] = [];
+
+    let places = await Promise.all(cities.map(async (city) => {
+      return {
+        cityId: city.id,
+        candidate: await this.findPlace(city)
+      };
+    }))
+    let headers = {
+      "Accept" : "image/*"
+    }
+    let baseURL = "https://maps.googleapis.com/maps/api/place/photo";
+    places.forEach(async (place) => {
+      let reference = place.candidate.photos[0].photo_reference;
+      let url = baseURL + "?maxwidth=800&photoreference=" + reference + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
+      let response = await axios.get(url, {headers});
+      let image = Buffer.from(response.data);
+      let type = response.headers["content-type"].split("/")[1];
+      let city = cities.find(c => c.id === place.cityId);
+      if (!city) {
+        throw new ApiError("City not found");
+      }
+      let imageName = city.name_ascii.replace(/\s/g, '_') + "." + type;
+
+      let cdnUrl = await this.uploadImage(image, imageName);
+      city.image = cdnUrl;
+      let model = new City(city);
+      await model.update();
+      result.push(city);
+    })
+    return result;
   }
 
-  async uploadImage() {
-    console.log("Uploading image");
-    let image = Buffer.from(fs.readFileSync("src/assets/LosAngeles.jpg"));
-    console.log(image)
+  async findPlace(city: ICity): Promise<Candidate> {
+    let {x , y} = city.center;
+    let cityCenter = "point:" + x + "," + y;
+    let baseURL =
+      "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
+    let input = city.name;
+    let inputtype = "textquery";
+    let fields = ["photo", "name", "type"];
+    let language = "en"
+    let locationbias = cityCenter;
+
+    let params = new URLSearchParams();
+    params.append("input", input);
+    params.append("inputtype", inputtype);
+    params.append("fields", fields.join(","));
+    params.append("language", language);
+    params.append("locationbias", locationbias);
+    params.append("key", process.env.GOOGLE_PLACES_API_KEY ?? '');
+
+    let url = baseURL + "?" + params.toString();
+    let response: AxiosResponse<FindPlaceResponse> = await axios.get(url);
+    let candidates = response.data.candidates;
+    let filtered = candidates.filter( c => {
+      c.types.includes("locality")
+    })
+    if (filtered.length > 0) {
+      return filtered[0];
+    } else {
+      throw new ApiError("No city found");
+    }
+  }
+
+  async uploadImage(data: Buffer, name: string) {
     let params: PutObjectCommandInput = {
       Bucket: process.env.SPACE_BUCKET,
-      Key: "city-images/test.jpg",
-      Body: image,
+      Key: "city-images/" + name,
+      Body: data,
       ACL: "public-read",
       ContentType: "image/jpeg",
     }
 
     await uploadCDN(params);
-    return {"url": process.env.CDN_URL + "city-images/test.jpg"}
+    return process.env.CDN_URL + "city-images/test.jpg";
   }
 
   async nearestCities(lat: number, lng: number) {

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import CitiesController from "../controllers/CitiesController";
+import { City } from "../models/City";
+import { ApiError } from "../utils/errors";
 
 class CityRouter {
   private _router = Router();
@@ -48,18 +50,21 @@ class CityRouter {
       } catch (err) {
         res.status(500).json({ error: err });
       }
-    })
+    });
 
-    this.router.get("/upload/", async (req, res) => {
-      
+    this.router.get("/place", async (req, res) => {
       try {
-        console.log("Uploading image");
-        let result = await this._controller.uploadImage();
-        res.status(200).json("dickballs");
+        let city = await City.find(1)
+        let result = await this._controller.findPlace((city.data));
+        res.status(200).json(result);
       } catch (err) {
-        res.status(500).json({ error: err });
+        if (err instanceof ApiError) {
+          res.status(err.status).json({ error: err.message });
+        } else {
+          res.status(500).json({ error: err });
+        }
       }
-    })
+    });
   }
 }
 
