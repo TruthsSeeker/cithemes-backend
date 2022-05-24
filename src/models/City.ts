@@ -41,7 +41,7 @@ export class City {
         `,
         [lng, lat]
       )
-      .limit(10);
+      .limit(1);
   }
 
   async create() {
@@ -54,7 +54,20 @@ export class City {
   }
 
   async update() {
-    await knex<ICity>("cities").where("id", this.data.id).update(this.data);
+    let payload = {
+      name: this.data.name,
+      country: this.data.country,
+      iso2: this.data.iso2,
+      name_ascii: this.data.name_ascii,
+      name_alt: this.data.name_alt,
+      capital: this.data.capital,
+      lat: this.data.lat,
+      lng: this.data.lng,
+      population: this.data.population,
+      center: this.data.center.x + "," + this.data.center.y,
+      image: this.data.image,
+    }
+    await knex<ICity>("cities").where("id", this.data.id).update(payload);
   }
 
   async delete() {

@@ -16,49 +16,57 @@ class CitiesController {
 
   async findCity(query: string) {}
 
-  async getImages(cities: ICity[]){
+  async getImages(cities: ICity[]) {
     let result: ICity[] = [];
 
-    let places = await Promise.all(cities.map(async (city) => {
-      return {
-        cityId: city.id,
-        candidate: await this.findPlace(city)
-      };
-    }))
+    let places = await Promise.all(
+      cities.map(async (city) => {
+        return {
+          cityId: city.id,
+          candidate: await this.findPlace(city),
+        };
+      })
+    );
     let headers = {
-      "Accept" : "image/*"
-    }
+      Accept: "image/*",
+    };
     let baseURL = "https://maps.googleapis.com/maps/api/place/photo";
     places.forEach(async (place) => {
       let reference = place.candidate.photos[0].photo_reference;
-      let url = baseURL + "?maxwidth=800&photoreference=" + reference + "&key=" + process.env.GOOGLE_PLACES_API_KEY;
-      let response = await axios.get(url, {headers});
-      let image = Buffer.from(response.data);
+      let url =
+        baseURL +
+        "?maxwidth=800&photoreference=" +
+        reference +
+        "&key=" +
+        process.env.GOOGLE_PLACES_API_KEY;
+      let response: AxiosResponse<Buffer> = await axios.get(url, { headers: headers, responseType: "arraybuffer" });
+      let image = response.data;
       let type = response.headers["content-type"].split("/")[1];
-      let city = cities.find(c => c.id === place.cityId);
+      let city = cities.find((c) => c.id === place.cityId);
       if (!city) {
         throw new ApiError("City not found");
       }
-      let imageName = city.name_ascii.replace(/\s/g, '_') + "." + type;
+      let imageName = city.name_ascii.replace(/\s/g, "_") + "." + type;
+
 
       let cdnUrl = await this.uploadImage(image, imageName);
       city.image = cdnUrl;
       let model = new City(city);
       await model.update();
       result.push(city);
-    })
+    });
     return result;
   }
 
   async findPlace(city: ICity): Promise<Candidate> {
-    let {x , y} = city.center;
+    let { x, y } = city.center;
     let cityCenter = "point:" + x + "," + y;
     let baseURL =
       "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
     let input = city.name;
     let inputtype = "textquery";
     let fields = ["photo", "name", "type"];
-    let language = "en"
+    let language = "en";
     let locationbias = cityCenter;
 
     let params = new URLSearchParams();
@@ -67,14 +75,14 @@ class CitiesController {
     params.append("fields", fields.join(","));
     params.append("language", language);
     params.append("locationbias", locationbias);
-    params.append("key", process.env.GOOGLE_PLACES_API_KEY ?? '');
+    params.append("key", process.env.GOOGLE_PLACES_API_KEY ?? "");
 
     let url = baseURL + "?" + params.toString();
     let response: AxiosResponse<FindPlaceResponse> = await axios.get(url);
     let candidates = response.data.candidates;
-    let filtered = candidates.filter( c => {
-      c.types.includes("locality")
-    })
+    let filtered = candidates.filter((c) => {
+      return c.types.includes("locality");
+    });
     if (filtered.length > 0) {
       return filtered[0];
     } else {
@@ -94,6 +102,22 @@ class CitiesController {
     await uploadCDN(params);
     return process.env.CDN_URL + "city-images/test.jpg";
   }
+
+  // async uploadImage() {
+  //   console.log("Uploading image");
+  //   let image = Buffer.from(fs.readFileSync("src/assets/LosAngeles.jpg"));
+  //   console.log(image);
+  //   let params: PutObjectCommandInput = {
+  //     Bucket: process.env.SPACE_BUCKET,
+  //     Key: "city-images/test.jpg",
+  //     Body: image,
+  //     ACL: "public-read",
+  //     ContentType: "image/jpeg",
+  //   };
+
+  //   await uploadCDN(params);
+  //   return { url: process.env.CDN_URL + "city-images/test.jpg" };
+  // }
 
   async nearestCities(lat: number, lng: number) {
     let result = await City.findNeareast(lat, lng);
