@@ -41,7 +41,7 @@ export class City {
         `,
         [lng, lat]
       )
-      .limit(1);
+      .limit(5);
   }
 
   async create() {
