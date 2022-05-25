@@ -14,7 +14,41 @@ class CitiesController {
     return { result: await PlaylistEntry.findPlaylist(id) };
   }
 
-  async findCity(query: string) {}
+  async findCity(query: string) {
+    let results = await City.findByName(query);
+    
+    return await this.formatCities(results);
+  }
+  
+  async nearestCities(lat: number, lng: number) {
+    let result = await City.findNeareast(lat, lng);
+
+    return await this.formatCities(result);
+  }
+
+  private async formatCities(result: ICity[]) {
+    //Memoize distance ordering
+    let hashedResult = [];
+    for (let i = 0; i < result.length; i++) {
+      let city = {
+        cityId: result[i].id,
+        id: i,
+      };
+      hashedResult.push(city);
+    }
+
+    let hasImages = result.filter((city) => !!city.image);
+    let needsImages = result.filter((city) => !city.image);
+    if (needsImages.length > 0) {
+      needsImages = await this.getImages(needsImages);
+    }
+    let resultWithImages = hasImages.concat(needsImages);
+
+    // Return results sorted by distance
+    return hashedResult.map((hash) => {
+      return resultWithImages.find((city) => city.id === hash.cityId);
+    });
+  }
 
   async getImages(cities: ICity[]) {
 
@@ -58,7 +92,7 @@ class CitiesController {
     }
     return result;
   }
-
+  
   async findPlace(city: ICity): Promise<Candidate> {
     let { x, y } = city.center;
     let cityCenter = "point:" + x + "," + y;
@@ -120,31 +154,6 @@ class CitiesController {
   //   return { url: process.env.CDN_URL + "city-images/test.jpg" };
   // }
 
-  async nearestCities(lat: number, lng: number) {
-    let result = await City.findNeareast(lat, lng);
-
-    //Memoize distance ordering
-    let hashedResult = [];
-    for (let i = 0; i < result.length; i++) {
-      let city = {
-        cityId: result[i].id,
-        id: i,
-      };
-      hashedResult.push(city);
-    }
-
-    let hasImages = result.filter((city) => !!city.image);
-    let needsImages = result.filter((city) => !city.image);
-    if (needsImages.length > 0) {
-      needsImages = await this.getImages(needsImages);
-    }
-    let resultWithImages = hasImages.concat(needsImages);
-
-    // Return results sorted by distance
-    return hashedResult.map((hash) => {
-      return resultWithImages.find((city) => city.id === hash.cityId);
-    });
-  }
 }
 
 export = new CitiesController();

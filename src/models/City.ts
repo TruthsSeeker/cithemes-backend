@@ -44,6 +44,13 @@ export class City {
       .limit(5);
   }
 
+  static async findByName(query: string) {
+    return await knex<ICity>("cities")
+      .select("*")
+      .whereRaw(`name % ?`, [query])
+      .limit(10);
+  }
+
   async create() {
     let exists = await knex<ICity>("cities").first().where(this.data);
     if (!exists) {
