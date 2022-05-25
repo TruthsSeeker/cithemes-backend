@@ -14,9 +14,9 @@ class CitiesController {
     return { result: await PlaylistEntry.findPlaylist(id) };
   }
 
-  async findCity(query: string) {
+  async findCityByName(query: string) {
     let results = await City.findByName(query);
-    
+
     return await this.formatCities(results);
   }
   
@@ -81,7 +81,7 @@ class CitiesController {
       if (!city) {
         throw new ApiError("City not found");
       }
-      let imageName = city.name_ascii.replace(/\s/g, "_") + "." + type;
+      let imageName = city.name_ascii.replace(/\s/g, "_") + "_" + city.iso2 + "." + type;
 
 
       let cdnUrl = await this.uploadImage(image, imageName, type);

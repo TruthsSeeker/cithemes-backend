@@ -34,7 +34,7 @@ class CityRouter {
     this.router.get("/find/:query", async (req, res) => {
       try {
         let query = req.params.query;
-        let result = await this._controller.findCity(query);
+        let result = await this._controller.findCityByName(query);
         res.status(200).json(result);
       } catch (err) {
         res.status(500).json({ error: err });
@@ -52,19 +52,6 @@ class CityRouter {
       }
     });
 
-    this.router.get("/place", async (req, res) => {
-      try {
-        let city = await City.find(1)
-        let result = await this._controller.findPlace((city.data));
-        res.status(200).json(result);
-      } catch (err) {
-        if (err instanceof ApiError) {
-          res.status(err.status).json({ error: err.message });
-        } else {
-          res.status(500).json({ error: err });
-        }
-      }
-    });
   }
 }
 
