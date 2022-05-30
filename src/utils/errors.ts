@@ -14,3 +14,9 @@ export class ApiError extends ServerError {
         super(message, 500);
     }
 }
+
+export class HometownError extends ServerError {
+    constructor(message: string) {
+        super(message, 403);
+    }
+}

@@ -2,7 +2,7 @@ import { Router } from "express";
 import jwt from "express-jwt";
 import AuthController from "../controllers/AuthController";
 import { IToken } from "../models/Token";
-import { AuthError } from "../utils/errors";
+import { AuthError, HometownError } from "../utils/errors";
 
 class AuthRouter {
   private _router = Router();
@@ -57,13 +57,34 @@ class AuthRouter {
         } catch (e) {
           console.log(typeof e);
           if (e instanceof AuthError) {
-            res.status(401).json({ error: e.message });
+            res.status(e.status).json({ error: e.message });
           } else {
             res.status(500).json({ error: e });
           }
         }
       }
     );
+
+    this.router.post(
+      "/hometown",
+      jwt({
+        secret: process.env.JWT_SECRET ?? "",
+        algorithms: ["HS256"],
+        requestProperty: "payload",
+      }),
+      async (req, res) => {
+        try {
+          res.status(200).json(await this._controller.setHometown(req));
+        } catch (e) {
+          console.log(typeof e);
+          if (e instanceof HometownError) {
+            res.status(e.status).json({ error: e.message });
+          } else {
+            res.status(500).json({ error: e });
+          }
+        }
+      }
+    )
   }
 }
 

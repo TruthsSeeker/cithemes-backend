@@ -90,9 +90,9 @@ export default class Token {
 
     getAccessToken(){
         if (!!this.data) {
-            let jwtExp = process.env.NODE_ENV === 'development' ? '10s' : '10m'
+            let jwtExp = process.env.NODE_ENV === 'development' ? '300s' : '10m'
             let payload = {
-                id: this.data.user_id
+                user_id: this.data.user_id
             }
             return jwt.sign(payload , process.env.JWT_SECRET!, {expiresIn: jwtExp})
         } else throw "No token data"

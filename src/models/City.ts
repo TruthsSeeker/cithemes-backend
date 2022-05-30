@@ -81,7 +81,7 @@ export class City {
     let id = this.data.id;
 
     if (!!id) {
-      await knex<ICity>("cities").where({ id: id }).delete();
+      await knex<ICity>("cities").where({ id: id }).del();
     } else {
       throw new Error(`No id provided`);
     }
