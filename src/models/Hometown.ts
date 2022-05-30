@@ -47,7 +47,8 @@ export class Hometown {
     if (!exists) {
       this.data.created_at = new Date();
       this.data.updated_at = new Date();
-      this.data = await knex<IHometown>("hometowns").insert(this.data);
+      this.data = (await knex<IHometown>("hometowns").insert(this.data).returning('*'))[0];
+      return this.data;
     } else {
       throw new Error(`Hometown already exists`);
     }
@@ -60,7 +61,8 @@ export class Hometown {
       .andWhere("user_id", this.data.user_id);
     if (exists) {
       this.data.updated_at = new Date();
-      this.data = await knex<IHometown>("hometowns").update(this.data);
+      await knex<IHometown>("hometowns").update(this.data);
+      return this.data;
     } else {
       throw new Error(`Hometown does not exist`);
     }
