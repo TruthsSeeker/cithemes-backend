@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import {v4 as uuid} from 'uuid'
 import { knex } from '../db/knexfile';
 import { AuthError } from '../utils/errors';
-import { IUser, User } from './User';
 
 export interface IToken {
     user_id: number;
@@ -52,7 +51,6 @@ export default class Token {
     }
 
     // Throws if token hasn't successfully been invalidated
-    // TODO
     async invalidate() {
         let family = await knex.withRecursive('ancestors', (qb)=> {
             qb.select().from('tokens').where('jwtid', this.data!.jwtid)
@@ -91,9 +89,9 @@ export default class Token {
 
     getAccessToken(){
         if (!!this.data) {
-            let jwtExp = process.env.NODE_ENV === 'development' ? '10s' : '10m'
+            let jwtExp = process.env.NODE_ENV === 'development' ? '300s' : '10m'
             let payload = {
-                id: this.data.user_id
+                user_id: this.data.user_id
             }
             return jwt.sign(payload , process.env.JWT_SECRET!, {expiresIn: jwtExp})
         } else throw "No token data"

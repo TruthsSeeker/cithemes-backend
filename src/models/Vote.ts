@@ -50,7 +50,7 @@ export class Vote {
         let id = this.data.id
 
         if (!!id) {
-            await knex<IVote>('votes').where({ id: id }).delete()
+            await knex<IVote>('votes').where({ id: id }).del()
         } else {
             throw new Error(`No id provided`)
         }

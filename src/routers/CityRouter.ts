@@ -1,5 +1,7 @@
 import { Router } from "express";
 import CitiesController from "../controllers/CitiesController";
+import { City } from "../models/City";
+import { ApiError } from "../utils/errors";
 
 class CityRouter {
   private _router = Router();
@@ -14,14 +16,6 @@ class CityRouter {
   }
 
   async _configure() {
-    this.router.post("/create", async (req, res) => {
-      try {
-        res.status(200).json(await this._controller.create(req));
-      } catch (err) {
-        res.status(500).json({ error: err });
-      }
-    });
-
     this.router.get("/:id/playlist", async (req, res) => {
       try {
         let id = parseInt(req.params.id);
@@ -37,15 +31,30 @@ class CityRouter {
       }
     });
 
-    this.router.get("/:query", async (req, res) => {
+    this.router.get("/find", async (req, res) => {
       try {
-        let query = req.params.query;
-        let result = await this._controller.findCity(query);
-        res.status(200).json(result);
+        let {query} = req.query;
+        let result = await this._controller.findCityByName(query?.toString() ?? '');
+        res.status(200).json({ result: result });
       } catch (err) {
         res.status(500).json({ error: err });
       }
     });
+
+    this.router.get("/nearest/:lat/:lng", async (req, res) => {
+      try {
+        let lat = parseFloat(req.params.lat);
+        let lng = parseFloat(req.params.lng);
+        console.log(lat, lng);
+        let result = await this._controller.nearestCities(lat, lng);
+        console.log(result);
+        res.status(200).json({result:result});
+      } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: err });
+      }
+    });
+
   }
 }
 

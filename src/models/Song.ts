@@ -59,7 +59,7 @@ export class Song {
         let id = this.data.id
 
         if (!!id) {
-            await knex<ISong>('songs').where({ id: id }).delete()
+            await knex<ISong>('songs').where({ id: id }).del()
         } else {
             throw new Error(`No id provided`)
         }

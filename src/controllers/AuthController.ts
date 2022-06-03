@@ -1,6 +1,8 @@
 import { Request } from "express";
+import { Hometown } from "../models/Hometown";
 import Token, { IToken } from "../models/Token";
 import {IUser, User} from '../models/User'
+import { HometownError } from "../utils/errors";
 
 class AuthController {
     async login(req: Request) {
@@ -43,6 +45,38 @@ class AuthController {
             result: await token.refreshToken()
         }
         
+    }
+
+    async logout(req: Request) {
+        let payload = req.payload as IToken
+        let token = new Token(payload)
+        await token.invalidate()
+        return {
+            result: true
+        }
+    }
+
+    async setHometown(req: Request) {
+        let payload = req.payload as IToken
+        let {city_id} = req.body
+        let hometown: Hometown
+
+        let existing = await Hometown.findByUserId(payload.user_id)
+        if (existing?.updated_at && existing.updated_at > new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)) {
+            throw new HometownError('Cannot change hometown too often')
+        } else if (existing) {
+            existing.updated_at = new Date()
+            hometown = new Hometown(existing)
+            await hometown.update()
+        } else {
+            hometown = new Hometown({city_id: city_id, user_id: payload.user_id})
+            await hometown.create()
+        } 
+        return {
+            result: {
+                hometown: hometown.data.id
+            }
+        }
     }
 
 }

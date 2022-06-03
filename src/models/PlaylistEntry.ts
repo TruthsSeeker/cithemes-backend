@@ -175,7 +175,7 @@ export class PlaylistEntry {
     let id = this.data.id;
 
     if (!!id) {
-      await knex<IPlaylistEntry>("playlist_entries").where("id", id).delete();
+      await knex<IPlaylistEntry>("playlist_entries").where("id", id).del();
     } else {
       throw new Error(`No id provided`);
     }
