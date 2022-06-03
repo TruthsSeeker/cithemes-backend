@@ -41,14 +41,16 @@ export class City {
         `,
         [lng, lat]
       )
-      .limit(5);
+      .limit(10);
   }
 
   static async findByName(query: string) {
-    return await knex<ICity>("cities")
+    let sql = knex<ICity>("cities")
       .select("*")
       .whereRaw(`name % ?`, [query])
       .limit(10);
+    console.log(sql.toQuery());
+    return await sql;
   }
 
   async create() {

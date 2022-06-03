@@ -62,12 +62,27 @@ class CitiesController {
         };
       })
     );
+
+    let imageLessCities = places.filter((place) => !place.candidate);
+    for (var city of imageLessCities) {
+      let placeholdered = cities.find((c) => c.id === city.cityId);
+      if (!placeholdered) {
+        throw new ApiError("City not found");
+      }
+      placeholdered.image = process.env.CDN_URL + "city-images/" + "placeholder.png";
+
+      let model = new City(placeholdered);
+      await model.update();
+      result.push(placeholdered);
+    }
+    
+    let placesToLookup = places.filter((place) => !!place.candidate);
     let headers = {
       Accept: "image/*",
     };
     let baseURL = "https://maps.googleapis.com/maps/api/place/photo";
-    for (var place of places) {
-      let reference = place.candidate.photos[0].photo_reference;
+    for (var place of placesToLookup) {
+      let reference = place.candidate!.photos[0].photo_reference;
       let url =
         baseURL +
         "?maxwidth=800&photoreference=" +
@@ -93,7 +108,7 @@ class CitiesController {
     return result;
   }
   
-  async findPlace(city: ICity): Promise<Candidate> {
+  async findPlace(city: ICity): Promise<Candidate | undefined> {
     let { x, y } = city.center;
     let cityCenter = "point:" + x + "," + y;
     let baseURL =
@@ -121,7 +136,7 @@ class CitiesController {
     if (filtered.length > 0) {
       return filtered[0];
     } else {
-      throw new ApiError("No city found");
+      return undefined;
     }
   }
 

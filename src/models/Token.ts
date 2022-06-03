@@ -51,7 +51,6 @@ export default class Token {
     }
 
     // Throws if token hasn't successfully been invalidated
-    // TODO
     async invalidate() {
         let family = await knex.withRecursive('ancestors', (qb)=> {
             qb.select().from('tokens').where('jwtid', this.data!.jwtid)
