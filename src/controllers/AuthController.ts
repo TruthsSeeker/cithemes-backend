@@ -56,13 +56,27 @@ class AuthController {
         }
     }
 
+    async update(req: Request) {
+        let payload = req.payload as IToken
+        let {name, surname, email, password} = req.body
+        // TODO: Refactor models to have an id constructor
+        // let user = new User({id: payload.user_id})
+        let user = await User.getUser(payload.user_id)
+        await user.update()
+        return {
+            result: "OK"
+        }
+    }
+
     async setHometown(req: Request) {
         let payload = req.payload as IToken
         let {city_id} = req.body
         let hometown: Hometown
 
         let existing = await Hometown.findByUserId(payload.user_id)
-        if (existing?.updated_at && existing.updated_at > new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)) {
+        // let delay = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
+        let delay = new Date(Date.now() - 1000 * 60)
+        if (existing?.updated_at && existing.updated_at < delay) {
             throw new HometownError('Cannot change hometown too often')
         } else if (existing) {
             existing.updated_at = new Date()

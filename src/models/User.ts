@@ -16,6 +16,14 @@ export class User {
         this.data = user
     }
 
+    static async getUser(id: number): Promise<User> {
+        let user = await knex<IUser>('users').first().where('id', id)
+        if (!user) {
+            throw "User not found"
+        }
+        return new User(user)
+    }
+
     async create(email: string, password: string) {
         this.data = {
             email: email,
@@ -46,6 +54,19 @@ export class User {
             throw "No user data to save"
         }
  
+    }
+
+    async update(){
+        if (!!this.data) {
+            await knex<IUser>('users').update(this.data).where('id', this.data.id)
+        }
+    }
+
+    async delete() {
+        if (!!this.data) {
+            await knex<IUser>('users').delete().where('id', this.data.id)
+            //TODO: Delete all user's tokens
+        }
     }
 
     async login() {

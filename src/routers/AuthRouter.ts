@@ -85,6 +85,23 @@ class AuthRouter {
         }
       }
     )
+
+    this.router.post(
+      "/update",
+      jwt({
+        secret: process.env.JWT_SECRET ?? "",
+        algorithms: ["HS256"],
+        requestProperty: "payload",
+      }),
+      async (req, res) => {
+        try {
+          res.status(200).json(await this._controller.update(req));
+        } catch (e) {
+          res.status(500).json({ error: e });
+        }
+      }
+    )
+
     //TODO: split into two routers
     this.router.post(
       "/hometown",
