@@ -25,8 +25,8 @@ class AuthController {
 
     async signup(req: Request) {
         let {email, password} = req.body
-        let user = new User()
-        await user.create(email, password)
+        let user = new User({email: email, password:password})
+        await user.create()
         let token = new Token()
         await token.create(user.data!.id!, email)
         // return {token: token.getRefreshToken()}
@@ -57,12 +57,11 @@ class AuthController {
     }
 
     async update(req: Request) {
-        let payload = req.payload as IToken
-        let {name, surname, email, password} = req.body
-        // TODO: Refactor models to have an id constructor
-        // let user = new User({id: payload.user_id})
-        let user = await User.getUser(payload.user_id)
-        await user.update()
+        let {user_id, email, password, new_password} = req.body
+
+        let user = await User.getUser(user_id)
+
+        await user.update({email: email, password: password}, new_password)
         return {
             result: "OK"
         }
