@@ -50,14 +50,15 @@ export class User {
     await knex<IUser>("users").update(this.data).where("id", this.data.id);
   }
 
-  async update(newData: IUser, newPassword?: string) {
-    if (!this._checkPassword(newData.password, this.data.password)) throw "Invalid password";
-    if (newPassword) {
-        this.data.password = newPassword;
-        if (!this._validate()) throw "Invalid user data";
-        this.data.password = this._hashPassword(newData.password);
+  async update(email: string, password?: string, newPassword?: string) {
+    if (newPassword && password) {
+      if (!this._checkPassword(password, this.data.password))
+        throw "Invalid password";
+      this.data.password = newPassword;
+      if (!this._validate()) throw "Invalid user data";
+      this.data.password = this._hashPassword(newPassword);
     }
-    this.data.email = newData.email;
+    this.data.email = email;
     await knex<IUser>("users").update(this.data).where("id", this.data.id);
   }
 

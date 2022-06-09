@@ -61,7 +61,7 @@ class AuthController {
 
         let user = await User.getUser(user_id)
 
-        await user.update({email: email, password: password}, new_password)
+        await user.update(email, password, new_password)
         return {
             result: "OK"
         }
