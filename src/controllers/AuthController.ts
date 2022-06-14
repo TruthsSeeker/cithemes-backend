@@ -75,7 +75,7 @@ class AuthController {
         let existing = await Hometown.findByUserId(payload.user_id)
         // let delay = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
         let delay = new Date(Date.now() - 1000 * 60)
-        if (existing?.updated_at && existing.updated_at < delay) {
+        if (existing?.updated_at && existing.updated_at > delay) {
             throw new HometownError('Cannot change hometown too often')
         } else if (existing) {
             existing.updated_at = new Date()
