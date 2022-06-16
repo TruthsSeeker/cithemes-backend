@@ -47,9 +47,8 @@ class AuthController {
         
     }
 
-    async logout(req: Request) {
-        let payload = req.payload as IToken
-        let token = new Token(payload)
+    async logout(tokenData: IToken) {
+        let token = new Token(tokenData)
         await token.invalidate()
         return {
             result: true

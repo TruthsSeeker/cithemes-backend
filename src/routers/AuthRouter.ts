@@ -74,14 +74,12 @@ class AuthRouter {
       }),
       async (req, res) => {
         try {
-          res.status(200).json(await this._controller.logout(req));
+          let {token} = req.body;
+          
+          res.status(200).json(await this._controller.logout(token));
         } catch (e) {
-          console.log(typeof e);
-          if (e instanceof HometownError) {
-            res.status(e.status).json({ error: e.message });
-          } else {
+        console.log(typeof e);  
             res.status(500).json({ error: e });
-          }
         }
       }
     )
