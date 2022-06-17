@@ -56,9 +56,9 @@ class AuthController {
     }
 
     async update(req: Request) {
-        let {user_id, email, password, new_password} = req.body
+        let {id: id, email, password, new_password} = req.body
 
-        let user = await User.getUser(user_id)
+        let user = await User.getUser(id)
 
         await user.update(email, password, new_password)
         return {
