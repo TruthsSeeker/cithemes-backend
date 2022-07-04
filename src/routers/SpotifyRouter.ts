@@ -43,7 +43,8 @@ class SpotifyRouter {
 
         this.router.get("/callback", async (req, res, next) => {
             try {
-                res.status(200).json(await this._controller.loginCallback(req))
+                let result = await this._controller.loginCallback(req)
+                res.status(200).json(result)
             } catch (err) {
                 res.status(500).json({error:err})
             }
