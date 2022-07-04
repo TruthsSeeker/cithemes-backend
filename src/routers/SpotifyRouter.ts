@@ -30,6 +30,24 @@ class SpotifyRouter {
                 res.status(500).json({error:err})
             }
         })
+
+        this.router.get("/login", async (req, res, next) => {
+            try {
+                let url = await this._controller.getLoginUrl()
+                res.redirect(url)
+                // res.status(200).json(url)
+            } catch (err) {
+                res.status(500).json({error:err})
+            }
+        })
+
+        this.router.get("/callback", async (req, res, next) => {
+            try {
+                res.status(200).json(await this._controller.loginCallback(req))
+            } catch (err) {
+                res.status(500).json({error:err})
+            }
+        })
     }
 }   
 
