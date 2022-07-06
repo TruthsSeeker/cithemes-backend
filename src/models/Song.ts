@@ -65,4 +65,11 @@ export class Song {
         }
     }
 
+    getSpotifyUri() {
+        return "spotify:track:" + this.data.spotify_id
+    }
+
+    static getSpotifyUri(spotify_id: string) {
+        return "spotify:track:" + spotify_id
+    }
 }

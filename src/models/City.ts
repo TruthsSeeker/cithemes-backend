@@ -13,6 +13,7 @@ export interface ICity {
   population: number;
   center: any;
   image?: string;
+  hash?: string;
 }
 
 export class City {
