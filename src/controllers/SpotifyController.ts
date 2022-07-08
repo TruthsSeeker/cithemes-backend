@@ -16,6 +16,9 @@ enum AuthenticationType {
     bearer = "Bearer"
 }
 class SpotifyController {
+    axiosInstance = axios.create({
+        baseURL: "https://api.spotify.com/v1/"})
+
     private _formattedAuthorization: string = Buffer.from(process.env.SPOTIFY_CLIENT_ID + ":" + process.env.SPOTIFY_CLIENT_SECRET).toString("base64");
 
 
@@ -79,7 +82,7 @@ class SpotifyController {
         searchParams.append("q", query)
         searchParams.append("type", "track,artist")
 
-        let response: AxiosResponse<SpotifyQuery> = await axios.get("https://api.spotify.com/v1/search?" + searchParams.toString(), { headers: headers })
+        let response: AxiosResponse<SpotifyQuery> = await this.axiosInstance.get("search?" + searchParams.toString(), { headers: headers })
         console.log(response.data)
         let tracks = convertToResponse(response.data)
         console.log(tracks)
@@ -94,7 +97,7 @@ class SpotifyController {
     //save token to db
     async saveToken(token: SpotifyTokenResponse) {
         let headers = await this._getAuthHeaders()
-        let response: AxiosResponse<SpotifyUserResponse> = await axios.get("https://api.spotify.com/v1/me", { headers: headers })
+        let response: AxiosResponse<SpotifyUserResponse> = await this.axiosInstance.get("me", { headers: headers })
         let credentials: ISpotifyCredentials = {
             access_token: token.access_token,
             refresh_token: token.refresh_token,
@@ -137,7 +140,7 @@ class SpotifyController {
         let searchParams = new URLSearchParams()
         searchParams.append("grant_type", "refresh_token")
         searchParams.append("refresh_token", credentials.data.refresh_token)
-        let response: AxiosResponse<SpotifyTokenResponse> = await axios.post("https://accounts.spotify.com/api/token", searchParams, { headers: headers })
+        let response: AxiosResponse<SpotifyTokenResponse> = await this.axiosInstance.post("https://accounts.spotify.com/api/token", searchParams, { headers: headers })
         this._cacheToken(response.data)
 
         credentials.data.access_token = response.data.access_token
@@ -157,20 +160,19 @@ class SpotifyController {
         let credentials = await SpotifyCredentials.first()
         let searchParams = new URLSearchParams()
         searchParams.append("name", name)
-        let response: AxiosResponse<SpotifyCreatePlaylistResponse> = await axios.post("https://api.spotify.com/v1/users/" + credentials.data.user_id + "/playlists", {name: name}, { headers: headers })
+        let response: AxiosResponse<SpotifyCreatePlaylistResponse> = await this.axiosInstance.post("users/" + credentials.data.user_id + "/playlists", {name: name}, { headers: headers })
         return response.data
     }
 
-    // TODO: format spotify URIs from ids
     // Update a playlist's items
     async updatePlaylist(playlistId: string, items: string[]) {
         let headers = await this._getAuthHeaders()
         let searchParams = new URLSearchParams()
         searchParams.append("uris", items.join(","))
-        let response: AxiosResponse<SpotifyUpdatePlaylistResponse> = await axios.put("https://api.spotify.com/v1/playlists/" + playlistId + "/tracks", {uris: items}, { headers: headers })
+        let response: AxiosResponse<SpotifyUpdatePlaylistResponse> = await this.axiosInstance.put("playlists/" + playlistId + "/tracks", {uris: items}, { headers: headers })
         return response.data
     }
         
 }
 
-    export = new SpotifyController()
+export = new SpotifyController()

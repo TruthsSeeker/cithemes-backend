@@ -16,6 +16,7 @@ export interface ICity {
   image?: string;
   hash?: string;
   has_changed?: boolean;
+  spotify_playlist_id?: string;
 }
 
 export class City {
@@ -98,13 +99,5 @@ export class City {
     });
   }
 
-  // Compute playlist has by concatenating then hashing the ids of each playlist entry whose city_id matches this city's id
-  async computePlaylistHash() {
-    let playlistEntries = await knex<any>("playlist_entries")
-      .select("id")
-      .where("city_id", this.data.id);
-    let playlistIds = playlistEntries.map((entry) => entry.id);
-    let playlistHash = playlistIds.join("-");
-    return bcrypt.hashSync(playlistHash, 10);
-  }
+
 }
