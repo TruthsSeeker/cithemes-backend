@@ -2,9 +2,9 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.raw(`create extension if not exists "pgcrypto"`);
   await knex.schema.alterTable("cities", table => {
     table.string("hash");
+    table.boolean("has_changed").defaultTo(false);
   });
 }
 
@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.alterTable("cities", table => {
     table.dropColumn("hash");
+    table.dropColumn("has_changed");
   });
-  await knex.raw(`drop extension if exists "pgcrypto"`);
 }
 

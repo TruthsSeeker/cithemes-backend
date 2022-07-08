@@ -1,4 +1,5 @@
 import { knex } from "../db/knexfile";
+import bcrypt from "bcrypt";
 
 export interface ICity {
   id?: number;
@@ -14,6 +15,7 @@ export interface ICity {
   center: any;
   image?: string;
   hash?: string;
+  has_changed?: boolean;
 }
 
 export class City {
@@ -88,5 +90,21 @@ export class City {
     } else {
       throw new Error(`No id provided`);
     }
+  }
+
+  async setChangedFlag(value: boolean) {
+    await knex<ICity>("cities").where("id", this.data.id).update({
+      has_changed: value,
+    });
+  }
+
+  // Compute playlist has by concatenating then hashing the ids of each playlist entry whose city_id matches this city's id
+  async computePlaylistHash() {
+    let playlistEntries = await knex<any>("playlist_entries")
+      .select("id")
+      .where("city_id", this.data.id);
+    let playlistIds = playlistEntries.map((entry) => entry.id);
+    let playlistHash = playlistIds.join("-");
+    return bcrypt.hashSync(playlistHash, 10);
   }
 }

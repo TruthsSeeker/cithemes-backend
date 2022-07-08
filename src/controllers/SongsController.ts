@@ -3,6 +3,7 @@ import {
   IAddToPlaylistRequest,
   IVoteRequest,
 } from "../apis/types/SongRequests";
+import { City } from "../models/City";
 import { Hometown } from "../models/Hometown";
 import { PlaylistEntry } from "../models/PlaylistEntry";
 import { ISong, Song } from "../models/Song";
@@ -19,13 +20,18 @@ class SongsController {
     });
     await vote.find();
     console.log(vote.data);
-
+    
     if (voteData.remove) {
       await vote.delete();
       await entry.updateVotes(-1);
     } else if (!vote.data.id) {
       await vote.create();
       await entry.updateVotes(1);
+    }
+
+    let city = await City.find(entry.data.city_id);
+    if (!city.data.has_changed) {
+      await city.setChangedFlag(true);
     }
   }
 
