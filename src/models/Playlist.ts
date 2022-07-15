@@ -16,6 +16,12 @@ export default class Playlist {
   constructor(playlist: IPlaylist) {
     this.data = playlist;
   }
+  // get all cities flagged as changed from the database
+  static async getChangedCities() {
+    return await knex<ICity>("cities")
+      .select("*")
+      .where("has_changed", true);
+  }
 
 
   // Compute playlist hash by concatenating then hashing the ids of each playlist entry whose city_id matches this city's id
@@ -27,6 +33,12 @@ export default class Playlist {
     let playlistIds = playlistEntries.map((entry) => entry.id);
     let playlistHash = playlistIds.join("-");
     return crypto.createHash("sha256").update(playlistHash).digest("base64");
+  }
+  
+  // reset changed cities and update hash
+  async cleanupCity() {
+    let hash = await this.computePlaylistHash();
+    await knex<ICity>("cities").where("city_id", this.data.city_id).update({ has_changed: false, hash: hash });
   }
 
   async comparePlaylistHash() {

@@ -16,12 +16,8 @@ export default async function update() {
   await iteratePlaylists(playlists);
 }
 
-// get all cities flagged as changed from the database
-async function getChangedCities() {
-  return await knex<ICity>("cities")
-    .select("*")
-    .where("has_changed", true);
-}
+//TODO: Refactor into model method
+
 
 // recursively update all playlists
 async function iteratePlaylists(playlists: Playlist[]) {
@@ -48,7 +44,7 @@ async function iteratePlaylists(playlists: Playlist[]) {
   await SpotifyController.updatePlaylist(spotify_id, uris);
 
   // cleanup
-  await cleanupCity(playlist);
+  await playlist.cleanupCity();
 
   // setTimeout to throttle requests without blocking the main thread
   setTimeout(async () => {
@@ -57,7 +53,7 @@ async function iteratePlaylists(playlists: Playlist[]) {
 }
 
 async function getPlaylists() {
-  let changedCities = await getChangedCities();
+  let changedCities = await Playlist.getChangedCities();
 
   // create Playlist objects for each city
   let playlists = changedCities.map((city) => {
@@ -68,11 +64,8 @@ async function getPlaylists() {
   return playlists;
 }
 
-// reset changed cities and update hash
-async function cleanupCity(playlist: Playlist) {
-  let hash = await playlist.computePlaylistHash();
-  await knex<ICity>("cities").where("city_id", playlist.data.city_id).update({ has_changed: false, hash: hash });
-}
+//TODO: Refactor into model method
+
 
 // set axios instance with retry logic on controller
 function setAxios() {
