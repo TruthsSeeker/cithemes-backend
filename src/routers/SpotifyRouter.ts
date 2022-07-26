@@ -30,6 +30,43 @@ class SpotifyRouter {
                 res.status(500).json({error:err})
             }
         })
+
+        this.router.get("/login", async (req, res, next) => {
+            try {
+                let url = await this._controller.getLoginUrl()
+                res.redirect(url)
+                // res.status(200).json(url)
+            } catch (err) {
+                res.status(500).json({error:err})
+            }
+        })
+
+        this.router.get("/callback", async (req, res, next) => {
+            try {
+                let result = await this._controller.loginCallback(req)
+                res.status(200).json(result)
+            } catch (err) {
+                res.status(500).json({error:err})
+            }
+        })
+
+        // create a playlist
+        this.router.post("/playlist", async (req, res, next) => {
+            try {
+                res.status(200).json(await this._controller.createPlaylist(req.body.name as string))
+            } catch (err) {
+                res.status(500).json({error:err})
+            }
+        })
+
+        // update a playlist
+        this.router.post("/playlist/update", async (req, res, next) => {
+            try {
+                res.status(200).json(await this._controller.updatePlaylist(req.body.id as string, req.body.tracks as string[]))
+            } catch (err) {
+                res.status(500).json({error:err})
+            }
+        })
     }
 }   
 

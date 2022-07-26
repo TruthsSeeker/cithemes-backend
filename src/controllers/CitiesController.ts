@@ -152,23 +152,6 @@ class CitiesController {
     await uploadCDN(params);
     return process.env.CDN_URL + "city-images/" + name;
   }
-
-  // async uploadImage() {
-  //   console.log("Uploading image");
-  //   let image = Buffer.from(fs.readFileSync("src/assets/LosAngeles.jpg"));
-  //   console.log(image);
-  //   let params: PutObjectCommandInput = {
-  //     Bucket: process.env.SPACE_BUCKET,
-  //     Key: "city-images/test.jpg",
-  //     Body: image,
-  //     ACL: "public-read",
-  //     ContentType: "image/jpeg",
-  //   };
-
-  //   await uploadCDN(params);
-  //   return { url: process.env.CDN_URL + "city-images/test.jpg" };
-  // }
-
 }
 
 export = new CitiesController();

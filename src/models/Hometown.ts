@@ -1,4 +1,5 @@
 import { knex } from "../db/knexfile";
+import { HometownError } from "../utils/errors";
 
 export interface IHometown {
   id?: number;
@@ -21,7 +22,7 @@ export class Hometown {
     if (!!result) {
       return new Hometown(result);
     } else {
-      throw new Error(`No corresponding entry found for ${id}`);
+      throw new HometownError(`No corresponding entry found for ${id}`);
     }
   }
 

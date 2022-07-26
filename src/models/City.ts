@@ -1,4 +1,5 @@
 import { knex } from "../db/knexfile";
+import bcrypt from "bcrypt";
 
 export interface ICity {
   id?: number;
@@ -13,6 +14,9 @@ export interface ICity {
   population: number;
   center: any;
   image?: string;
+  hash?: string;
+  has_changed?: boolean;
+  spotify_playlist_id?: string;
 }
 
 export class City {
@@ -88,4 +92,12 @@ export class City {
       throw new Error(`No id provided`);
     }
   }
+
+  async setChangedFlag(value: boolean) {
+    await knex<ICity>("cities").where("id", this.data.id).update({
+      has_changed: value,
+    });
+  }
+
+
 }
