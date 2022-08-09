@@ -41,6 +41,16 @@ class CityRouter {
       }
     });
 
+    this.router.get("/:id", async (req, res) => {
+      try {
+        let id = parseInt(req.params.id);
+        let result = await this._controller.findCityById(id);
+        res.status(200).json({ result: result });
+      } catch (err) {
+        res.status(500).json({ error: err });
+      }
+    });
+
     this.router.get("/nearest/:lat/:lng", async (req, res) => {
       try {
         let lat = parseFloat(req.params.lat);

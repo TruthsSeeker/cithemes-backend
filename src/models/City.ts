@@ -57,6 +57,15 @@ export class City {
     return await sql;
   }
 
+  static async findById(id: number) {
+    let result = await knex<ICity>("cities").first().where("id", id);
+    if (!!result) {
+      return new City(result);
+    } else {
+      throw new Error(`No corresponding entry found for ${id}`);
+    }
+  }
+
   async create() {
     let exists = await knex<ICity>("cities").first().where(this.data);
     if (!exists) {
