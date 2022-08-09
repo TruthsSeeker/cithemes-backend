@@ -62,7 +62,12 @@ export class Hometown {
       .andWhere("user_id", this.data.user_id);
     if (exists) {
       this.data.updated_at = new Date();
-      await knex<IHometown>("hometowns").update(this.data);
+      try {
+        await knex<IHometown>("hometowns").update(this.data).where("id", this.data.id);
+      } catch (error) {
+        console.log(error);
+        throw new Error(`Hometown update failed`);
+      }
       return this.data;
     } else {
       throw new Error(`Hometown does not exist`);

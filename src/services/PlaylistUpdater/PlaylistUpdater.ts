@@ -1,23 +1,21 @@
 import axios from "axios";
-import SpotifyController from "../controllers/SpotifyController";
-import { knex } from "../db/knexfile";
-import { ICity } from "../models/City";
-import Playlist from "../models/Playlist";
-import { PlaylistEntry } from "../models/PlaylistEntry";
-import { Song } from "../models/Song";
+import SpotifyController from "../../controllers/SpotifyController";
+import Playlist from "../../models/Playlist";
+import { PlaylistEntry } from "../../models/PlaylistEntry";
+import { Song } from "../../models/Song";
 
 const spotifyController = SpotifyController
 
+update();
+
 export default async function update() {
-  let playlists = await getPlaylists();
-  setAxios();
+  // let playlists = await getPlaylists();
+  // setAxios();
 
-  // update each playlist
-  await iteratePlaylists(playlists);
+  // // update each playlist
+  // await iteratePlaylists(playlists);
+  console.log("update");
 }
-
-//TODO: Refactor into model method
-
 
 // recursively update all playlists
 async function iteratePlaylists(playlists: Playlist[]) {
@@ -63,9 +61,6 @@ async function getPlaylists() {
   playlists.filter((playlist) => playlist.comparePlaylistHash());
   return playlists;
 }
-
-//TODO: Refactor into model method
-
 
 // set axios instance with retry logic on controller
 function setAxios() {
