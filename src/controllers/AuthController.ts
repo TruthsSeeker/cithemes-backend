@@ -86,7 +86,7 @@ class AuthController {
         } 
         return {
             result: {
-                hometown: hometown.data.id
+                hometown: hometown.data.city_id
             }
         }
     }

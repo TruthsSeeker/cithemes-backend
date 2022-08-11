@@ -45,6 +45,10 @@ class CityRouter {
       try {
         let id = parseInt(req.params.id);
         let result = await this._controller.findCityById(id);
+
+        console.log("Result:")
+        console.log(JSON.stringify(result));
+        
         res.status(200).json({ result: result });
       } catch (err) {
         res.status(500).json({ error: err });

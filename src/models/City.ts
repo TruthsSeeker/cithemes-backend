@@ -60,7 +60,7 @@ export class City {
   static async findById(id: number) {
     let result = await knex<ICity>("cities").first().where("id", id);
     if (!!result) {
-      return new City(result);
+      return result;
     } else {
       throw new Error(`No corresponding entry found for ${id}`);
     }
