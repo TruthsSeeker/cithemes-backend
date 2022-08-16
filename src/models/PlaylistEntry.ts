@@ -49,9 +49,10 @@ export class PlaylistEntry {
       city_id: this.data.city_id,
     });
     if (!exists) {
-      this.data.id = await knex<IPlaylistEntry>("playlist_entries")
+      let idContainer = await knex<IPlaylistEntry>("playlist_entries")
         .insert(this.data)
-        .returning("id");
+        .returning("id")
+      this.data.id = idContainer[0].id;
     } else {
       this.data = exists;
     }
