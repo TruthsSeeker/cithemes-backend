@@ -16,13 +16,13 @@ export class Hometown {
     this.data = hometown;
   }
 
-  static async find(id: number) {
-    let result = await knex<IHometown>("hometowns").first().where("id", id);
+  static async find(user_id: number) {
+    let result = await knex<IHometown>("hometowns").first().where("user_id", user_id);
 
     if (!!result) {
       return new Hometown(result);
     } else {
-      throw new HometownError(`No corresponding entry found for ${id}`);
+      throw new HometownError(`No corresponding entry found for ${user_id}`);
     }
   }
 

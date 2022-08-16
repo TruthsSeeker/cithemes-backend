@@ -3,17 +3,20 @@ import SpotifyController from "../../controllers/SpotifyController";
 import Playlist from "../../models/Playlist";
 import { PlaylistEntry } from "../../models/PlaylistEntry";
 import { Song } from "../../models/Song";
+import 'dotenv/config'
+import { knex } from "../../db/knexfile";
 
 const spotifyController = SpotifyController
-
 update();
 
 export default async function update() {
-  // let playlists = await getPlaylists();
-  // setAxios();
+  console.log(process.env.NODE_ENV)
+  console.log(knex.client.config)
+  let playlists = await getPlaylists();
+  setAxios();
 
-  // // update each playlist
-  // await iteratePlaylists(playlists);
+  // update each playlist
+  await iteratePlaylists(playlists);
   console.log("update");
 }
 
@@ -52,7 +55,7 @@ async function iteratePlaylists(playlists: Playlist[]) {
 
 async function getPlaylists() {
   let changedCities = await Playlist.getChangedCities();
-
+  console.log(changedCities);
   // create Playlist objects for each city
   let playlists = changedCities.map((city) => {
     return new Playlist({ city_id: city.id ?? -1, hash: city.hash, name: city.name + ", " + city.iso2});

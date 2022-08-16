@@ -38,7 +38,7 @@ export default class Playlist {
   // reset changed cities and update hash
   async cleanupCity() {
     let hash = await this.computePlaylistHash();
-    await knex<ICity>("cities").where("city_id", this.data.city_id).update({ has_changed: false, hash: hash });
+    await knex<ICity>("cities").where("id", this.data.city_id).update({ has_changed: false, hash: hash });
   }
 
   async comparePlaylistHash() {
@@ -48,7 +48,7 @@ export default class Playlist {
   }
 
   async getCurrentHash() {
-    let city = await knex<ICity>("cities").first().where("city_id", this.data.city_id).select("hash");
+    let city = await knex<ICity>("cities").first().where("id", this.data.city_id).select("hash");
     this.data.hash = city?.hash;
   }
 }
