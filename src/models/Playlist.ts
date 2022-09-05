@@ -51,4 +51,9 @@ export default class Playlist {
     let city = await knex<ICity>("cities").first().where("id", this.data.city_id).select("hash");
     this.data.hash = city?.hash;
   }
+
+  async savePlaylistID(id: string) {
+    this.data.spotify_id = id
+    await knex<ICity>("cities").where("id", this.data.city_id).update({playlist_id: id})
+  }
 }

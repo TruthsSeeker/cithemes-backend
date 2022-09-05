@@ -35,10 +35,11 @@ async function iteratePlaylists(playlists: Playlist[]) {
 
   let spotify_id = playlist.data.spotify_id;
 
-  // if playlist doesn't exist, create it
+  // if playlist doesn't exist, create it and update the city's playlist_id
   if (!spotify_id) {
     let response = await SpotifyController.createPlaylist(playlist.data.name);
     spotify_id = response.id;
+    await playlist.savePlaylistID(spotify_id)
   }
 
   // update playlist
@@ -58,7 +59,7 @@ async function getPlaylists() {
   console.log(changedCities);
   // create Playlist objects for each city
   let playlists = changedCities.map((city) => {
-    return new Playlist({ city_id: city.id ?? -1, hash: city.hash, name: city.name + ", " + city.iso2});
+    return new Playlist({ city_id: city.id ?? -1, hash: city.hash, name: city.name + ", " + city.iso2, spotify_id: city.playlist_id});
   });
   // filter out any playlists that don't need to be updated
   playlists.filter((playlist) => playlist.comparePlaylistHash());
