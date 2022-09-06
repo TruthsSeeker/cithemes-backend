@@ -112,7 +112,7 @@ class AuthRouter {
         try {
           res.status(200).json(await this._controller.setHometown(req));
         } catch (e) {
-          console.log(typeof e);
+          console.log(e);
           if (e instanceof HometownError) {
             res.status(e.status).json({ error: e.message });
           } else {

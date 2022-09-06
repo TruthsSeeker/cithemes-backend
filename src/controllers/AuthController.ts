@@ -11,11 +11,13 @@ class AuthController {
         let passwordCorrect = await user.login()
         if (passwordCorrect) {
             let token = new Token()
-            token.create(user.data!.id!, email)
+            await token.create(user.data!.id!, email)
+            let hometown = await Hometown.findByUserId(user.data!.id!)
             return {
                 result: {
                     access_token: token.getAccessToken(), 
-                    refresh_token: token.getRefreshToken()
+                    refresh_token: token.getRefreshToken(),
+                    hometown_id: hometown?.city_id
                 }
             }
         } else {
@@ -86,7 +88,7 @@ class AuthController {
         } 
         return {
             result: {
-                hometown: hometown.data.id
+                hometown: hometown.data.city_id
             }
         }
     }

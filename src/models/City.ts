@@ -16,7 +16,7 @@ export interface ICity {
   image?: string;
   hash?: string;
   has_changed?: boolean;
-  spotify_playlist_id?: string;
+  playlist_id?: string;
 }
 
 export class City {
@@ -53,8 +53,16 @@ export class City {
       .select("*")
       .whereRaw(`name % ?`, [query])
       .limit(10);
-    console.log(sql.toQuery());
     return await sql;
+  }
+
+  static async findById(id: number) {
+    let result = await knex<ICity>("cities").first().where("id", id);
+    if (!!result) {
+      return result;
+    } else {
+      throw new Error(`No corresponding entry found for ${id}`);
+    }
   }
 
   async create() {
@@ -79,6 +87,7 @@ export class City {
       population: this.data.population,
       center: this.data.center.x + "," + this.data.center.y,
       image: this.data.image,
+      playlist_id: this.data.playlist_id
     }
     await knex<ICity>("cities").where("id", this.data.id).update(payload);
   }

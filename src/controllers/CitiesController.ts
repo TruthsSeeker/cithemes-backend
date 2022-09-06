@@ -20,6 +20,14 @@ class CitiesController {
     return await this.formatCities(results);
   }
   
+  async findCityById(id: number) {
+    let result = await City.findById(id);
+    if (!result) {
+      throw new ApiError("City not found");
+    }
+    return result;
+  }
+
   async nearestCities(lat: number, lng: number) {
     let result = await City.findNeareast(lat, lng);
 

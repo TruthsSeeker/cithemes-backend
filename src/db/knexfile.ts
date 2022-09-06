@@ -1,11 +1,7 @@
 import Knex from "knex"
 import path from "path"
 
-import dotenv from 'dotenv'
-
-dotenv.config({
-    path: '../../.env'
-})
+import 'dotenv/config'
 
 interface KnexConfig {
     [key: string]: object
