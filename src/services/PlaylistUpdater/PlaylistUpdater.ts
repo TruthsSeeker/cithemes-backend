@@ -18,6 +18,7 @@ export default async function update() {
   // update each playlist
   await iteratePlaylists(playlists);
   console.log("update");
+  process.exit()
 }
 
 // recursively update all playlists
