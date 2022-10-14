@@ -1,23 +1,20 @@
+import 'dotenv/config'
 import axios from "axios";
 import SpotifyController from "../../controllers/SpotifyController";
 import Playlist from "../../models/Playlist";
 import { PlaylistEntry } from "../../models/PlaylistEntry";
 import { Song } from "../../models/Song";
-import 'dotenv/config'
 import { knex } from "../../db/knexfile";
 
 const spotifyController = SpotifyController
 update();
 
 export default async function update() {
-  console.log(process.env.NODE_ENV)
-  console.log(knex.client.config)
   let playlists = await getPlaylists();
   setAxios();
 
   // update each playlist
   await iteratePlaylists(playlists);
-  console.log("update");
   process.exit()
 }
 
