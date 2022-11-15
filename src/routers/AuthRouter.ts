@@ -121,6 +121,30 @@ class AuthRouter {
         }
       }
     )
+
+    this.router.get(
+      "/hometown/:id",
+      jwt({
+        secret: process.env.JWT_SECRET ?? "",
+        algorithms: ["HS256"],
+        requestProperty: "payload",
+      }),
+      async (req, res) => {
+        try {
+          let response = await this._controller.getHometown(req) 
+          console.log(response)
+          res.status(200).json(response)
+        } catch(e) {
+          console.log(e);
+          if (e instanceof HometownError) {
+            res.status(e.status).json({ error: e.message });
+          } else {
+            res.status(500).json({ error: e });
+          }
+        }
+      }
+    )
+    
   }
 }
 

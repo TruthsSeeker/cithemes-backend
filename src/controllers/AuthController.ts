@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { City } from "../models/City";
 import { Hometown } from "../models/Hometown";
 import Token, { IToken } from "../models/Token";
 import {IUser, User} from '../models/User'
@@ -89,6 +90,22 @@ class AuthController {
         return {
             result: {
                 hometown: hometown.data.city_id
+            }
+        }
+    }
+
+    async getHometown(req: Request) {
+        let hometown_id = parseInt(req.params.id)
+
+        let hometown = await Hometown.findByCityId(hometown_id)
+        let city = await City.findById(hometown_id)
+        return {
+            result: {
+                hometown_id: hometown?.city_id,
+                name: city.name,
+                image: city.image,
+                country: city.country,
+                updated_at: hometown?.updated_at?.toISOString().replace(/(\.\d{3})/g, "")
             }
         }
     }
