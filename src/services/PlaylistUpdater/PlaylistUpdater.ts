@@ -15,14 +15,13 @@ export default async function update() {
 
   // update each playlist
   await iteratePlaylists(playlists);
-  process.exit()
 }
 
 // recursively update all playlists
 async function iteratePlaylists(playlists: Playlist[]) {
   let playlist = playlists.shift();
   if (!playlist) {
-    return;
+    process.exit()
   }
 
   // get playlist entries for this playlist
